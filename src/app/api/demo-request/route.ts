@@ -4,7 +4,7 @@ import { createOrUpdateSubscriber } from "@/lib/listmonk";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, company, role, industry, revenue, channels, challenge } = body;
+    const { name, email, company } = body;
 
     if (!name || !email || !company) {
       return NextResponse.json(
@@ -20,28 +20,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Mock mode: if Listmonk is not configured
+    // Mock mode
     if (!process.env.LISTMONK_URL || process.env.LISTMONK_URL === "http://localhost:9000") {
-      console.log(`[MOCK] Demo request from: ${name} <${email}> at ${company} (${role})`);
-      console.log(`[MOCK] Industry: ${industry}, Revenue: ${revenue}`);
-      console.log(`[MOCK] Channels: ${channels?.join(", ")}`);
-      console.log(`[MOCK] Challenge: ${challenge}`);
+      console.log(`[MOCK] Demo request from: ${name} <${email}> at ${company}`);
+      console.log(`[MOCK] Full data:`, JSON.stringify(body, null, 2));
       return NextResponse.json({ success: true, mock: true });
     }
 
-    const listId = parseInt(
-      process.env.LISTMONK_BLUEPRINT_LIST_ID || "1",
-      10
-    );
+    const listId = parseInt(process.env.LISTMONK_BLUEPRINT_LIST_ID || "1", 10);
 
     await createOrUpdateSubscriber(email, name, [listId], {
       company: company || "",
-      role: role || "",
-      industry: industry || "",
-      revenue: revenue || "",
-      channels: channels?.join(", ") || "",
-      challenge: challenge || "",
-      source: "demo-request",
+      role: body.role || "",
+      industry: body.industry || "",
+      companySize: body.companySize || "",
+      phone: body.phone || "",
+      lineId: body.lineId || "",
+      aiExperience: body.aiExperience || "",
+      departmentPriorities: JSON.stringify(body.departmentPriorities || {}),
+      mainProblems: (body.mainProblems || []).join(", "),
+      expectedResult: body.expectedResult || "",
+      kpi: body.kpi || "",
+      currentSoftware: body.currentSoftware || "",
+      dataStorages: (body.dataStorages || []).join(", "),
+      flexibility: body.flexibility || "",
+      security: body.security || "",
+      itTeam: body.itTeam || "",
+      training: body.training || "",
+      budget: body.budget || "",
+      timeline: body.timeline || "",
+      authority: body.authority || "",
+      source: body.source || "",
+      notes: body.notes || "",
+      formType: "demo-request",
     });
 
     return NextResponse.json({ success: true });

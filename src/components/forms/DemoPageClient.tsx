@@ -5,33 +5,7 @@ import Link from "next/link";
 import { Monitor, Calendar, Check } from "lucide-react";
 import { DemoForm } from "./DemoForm";
 
-type DemoFormTranslations = {
-  nameLabel: string;
-  namePlaceholder: string;
-  companyLabel: string;
-  companyPlaceholder: string;
-  roleLabel: string;
-  rolePlaceholder: string;
-  industryLabel: string;
-  industryPlaceholder: string;
-  industries: readonly string[];
-  revenueLabel: string;
-  revenuePlaceholder: string;
-  revenueRanges: readonly string[];
-  channelsLabel: string;
-  channelsPlaceholder: string;
-  channels: readonly string[];
-  challengeLabel: string;
-  challengePlaceholder: string;
-  submit: string;
-  submitting: string;
-  footer: string;
-};
-
-type SubmittedTranslations = {
-  title: string;
-  subtitle: string;
-};
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export function DemoPageClient({
   locale,
@@ -49,8 +23,8 @@ export function DemoPageClient({
 }: {
   locale: string;
   defaultEmail?: string;
-  formTranslations: DemoFormTranslations;
-  submittedTranslations: SubmittedTranslations;
+  formTranslations: any;
+  submittedTranslations: { title: string; subtitle: string };
   demoTitle: string;
   demoSubtitle: string;
   calUrl: string;
@@ -60,20 +34,20 @@ export function DemoPageClient({
   step1Label: string;
   step2Label: string;
 }) {
-  const [step, setStep] = useState<"form" | "calendar">("form");
+  const [phase, setPhase] = useState<"form" | "calendar">("form");
 
   return (
     <div className="px-6 py-8 md:py-12">
       <div className="max-w-5xl mx-auto">
 
-        {/* Step indicator */}
+        {/* Phase indicator */}
         <div className="flex items-center justify-center gap-3 mb-10">
           <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            step === "form"
+            phase === "form"
               ? "bg-white text-brand-navy"
               : "bg-green-500/10 text-green-400"
           }`}>
-            {step === "calendar" ? (
+            {phase === "calendar" ? (
               <Check className="w-4 h-4" />
             ) : (
               <span className="w-5 h-5 rounded-full bg-brand-navy/20 text-white text-xs flex items-center justify-center">1</span>
@@ -82,7 +56,7 @@ export function DemoPageClient({
           </div>
           <div className="w-8 h-px bg-white/20" />
           <div className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            step === "calendar"
+            phase === "calendar"
               ? "bg-white text-brand-navy"
               : "bg-white/5 text-white/30"
           }`}>
@@ -91,11 +65,10 @@ export function DemoPageClient({
           </div>
         </div>
 
-        {step === "form" ? (
-          /* ═══════════════ STEP 1: Form ═══════════════ */
+        {phase === "form" ? (
           <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
             {/* Left: pitch */}
-            <div className="flex-1 space-y-6">
+            <div className="flex-1 space-y-6 lg:sticky lg:top-24">
               <div className="flex items-center gap-3">
                 <div className="w-11 h-11 rounded-xl bg-indigo-500/10 flex items-center justify-center">
                   <Monitor className="w-5 h-5 text-indigo-400" />
@@ -104,6 +77,9 @@ export function DemoPageClient({
               </div>
               <p className="text-sm text-white/50 font-[family-name:var(--font-prompt)] leading-relaxed">
                 {demoSubtitle}
+              </p>
+              <p className="text-xs text-white/30 font-[family-name:var(--font-prompt)]">
+                {formTranslations.intro}
               </p>
 
               <div className="space-y-3 pt-2">
@@ -121,18 +97,17 @@ export function DemoPageClient({
               </div>
             </div>
 
-            {/* Right: form */}
-            <div className="w-full lg:max-w-md shrink-0">
+            {/* Right: multi-step form */}
+            <div className="w-full lg:max-w-lg shrink-0">
               <DemoForm
                 translations={formTranslations}
                 submittedTranslations={submittedTranslations}
                 defaultEmail={defaultEmail}
-                onSubmitted={() => setStep("calendar")}
+                onSubmitted={() => setPhase("calendar")}
               />
             </div>
           </div>
         ) : (
-          /* ═══════════════ STEP 2: Calendar embed ═══════════════ */
           <div className="max-w-3xl mx-auto space-y-6">
             <div className="text-center space-y-3">
               <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center mx-auto">
@@ -144,11 +119,10 @@ export function DemoPageClient({
               <p className="text-sm text-white/40 font-[family-name:var(--font-prompt)]">
                 {locale === "th"
                   ? "เลือกวันเวลาจากปฏิทินด้านล่าง เราจะยืนยันทางอีเมล"
-                  : "Choose a date and time from the calendar below. We'll confirm via email."}
+                  : "Choose a date and time below. We'll confirm via email."}
               </p>
             </div>
 
-            {/* Cal.com embed */}
             <div className="bg-white rounded-2xl overflow-hidden shadow-2xl shadow-black/20">
               <iframe
                 src={calUrl}
@@ -160,12 +134,8 @@ export function DemoPageClient({
           </div>
         )}
 
-        {/* Back link */}
         <div className="text-center pt-10">
-          <Link
-            href={backHref}
-            className="text-sm text-white/20 hover:text-white/40 transition-colors"
-          >
+          <Link href={backHref} className="text-sm text-white/20 hover:text-white/40 transition-colors">
             &larr; {backLabel}
           </Link>
         </div>
