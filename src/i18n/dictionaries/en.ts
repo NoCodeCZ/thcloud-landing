@@ -18,14 +18,14 @@ const en = {
   home: {
     hero: {
       tagline: "AI Transformation Blueprint",
-      headline: "From Scattered Data to a Business That Thinks",
+      headline: "Turn Scattered Data Into an AI-Ready Business System",
       subhead:
-        "Most businesses already have the data they need to make better decisions. They just can't access it fast enough, in the right shape, at the right moment. We fix that.",
+        "Your data already exists across multiple channels — it's just not unified in a usable format. We help you build the data infrastructure, dashboards, and AI interface that let your team ask, answer, and decide faster.",
     },
     form: {
-      emailLabel: "Work Email",
-      emailPlaceholder: "you@company.com",
-      submit: "Get the Free Blueprint",
+      emailLabel: "Contact Email",
+      emailPlaceholder: "name@company.com",
+      submit: "Get the Free AI Blueprint",
       submitting: "Sending...",
       footer: "Free. No spam. Unsubscribe anytime.",
     },
@@ -201,7 +201,7 @@ const en = {
     credibility: {
       line: "Built by Tong Hua Holding PCL (SET:TH) — 65 years in Thai business. Deploying now for manufacturing and SMB clients.",
     },
-    ctaButton: "Get the Free Blueprint",
+    ctaButton: "Get the Free AI Blueprint",
   },
   thankYou: {
     title: "You're in.",

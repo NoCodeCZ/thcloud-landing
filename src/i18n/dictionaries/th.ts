@@ -18,14 +18,14 @@ const th = {
   home: {
     hero: {
       tagline: "AI Transformation Blueprint",
-      headline: "จากข้อมูลกระจัดกระจาย สู่ธุรกิจที่คิดเองได้",
+      headline: "เปลี่ยนข้อมูลที่กระจัดกระจาย ให้กลายเป็นระบบธุรกิจที่พร้อมใช้ AI",
       subhead:
-        "ธุรกิจส่วนใหญ่มีข้อมูลที่จำเป็นอยู่แล้ว แค่เข้าถึงมันไม่ได้เร็วพอ ในรูปแบบที่ถูกต้อง ในเวลาที่ต้องการ เราแก้ปัญหานี้",
+        "ข้อมูลมีอยู่แล้วในหลายช่องทาง แต่ยังไม่ถูกรวมให้อยู่ในรูปแบบที่ใช้งานได้จริง เราช่วยสร้างโครงสร้างข้อมูล, Dashboard และ AI Interface ที่ทำให้ทีมของคุณถาม ตอบ และตัดสินใจได้เร็วขึ้น",
     },
     form: {
-      emailLabel: "อีเมลธุรกิจ",
-      emailPlaceholder: "you@company.com",
-      submit: "รับ Blueprint ฟรี",
+      emailLabel: "อีเมลสำหรับติดต่อ",
+      emailPlaceholder: "name@company.com",
+      submit: "รับ AI Blueprint ฟรี",
       submitting: "กำลังส่ง...",
       footer: "ฟรี ไม่มีสแปม ยกเลิกได้ตลอดเวลา",
     },
@@ -201,7 +201,7 @@ const th = {
     credibility: {
       line: "สร้างโดย ทงหัว โฮลดิ้ง PCL (SET:TH) — 65 ปีในธุรกิจไทย กำลัง Deploy ให้ลูกค้าภาคการผลิตและ SMB",
     },
-    ctaButton: "รับ Blueprint ฟรี",
+    ctaButton: "รับ AI Blueprint ฟรี",
   },
   thankYou: {
     title: "เรียบร้อย!",
