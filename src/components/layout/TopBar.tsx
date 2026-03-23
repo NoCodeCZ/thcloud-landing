@@ -1,0 +1,32 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
+export function TopBar({
+  actionLabel,
+  actionHref,
+  locale,
+}: {
+  actionLabel?: string;
+  actionHref?: string;
+  locale?: string;
+}) {
+  const brandHref = locale ? `/${locale}` : "/th";
+  return (
+    <header className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
+      <Link href={brandHref} className="flex items-center gap-2">
+        <span className="font-[family-name:var(--font-bai-jamjuree)] font-bold text-xl text-white">
+          THCloud.AI
+        </span>
+      </Link>
+      {actionLabel && actionHref && (
+        <Button
+          asChild
+          variant="outline"
+          className="border-white/20 text-white hover:bg-white/10"
+        >
+          <a href={actionHref}>{actionLabel}</a>
+        </Button>
+      )}
+    </header>
+  );
+}
