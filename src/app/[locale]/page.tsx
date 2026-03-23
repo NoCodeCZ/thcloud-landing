@@ -512,7 +512,7 @@ export default async function Home({
                 <div className="flex-1 max-w-[80px] h-px bg-white/10" />
               </div>
               <a
-                href="https://cal.tonghuagroup.com/tatchat"
+                href={`/${locale}/demo`}
                 className="text-sm text-indigo-300/50 hover:text-indigo-300 transition-colors font-medium"
               >
                 {t.finalCta.bookCall} &rarr;

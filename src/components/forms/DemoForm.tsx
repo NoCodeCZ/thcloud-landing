@@ -35,10 +35,12 @@ export function DemoForm({
   translations,
   submittedTranslations,
   defaultEmail,
+  onSubmitted,
 }: {
   translations: DemoFormTranslations;
   submittedTranslations: SubmittedTranslations;
   defaultEmail?: string;
+  onSubmitted?: () => void;
 }) {
   const t = translations;
   const [loading, setLoading] = useState(false);
@@ -82,14 +84,22 @@ export function DemoForm({
       const data = await res.json();
 
       if (data.mock || res.ok) {
-        setSubmitted(true);
+        if (onSubmitted) {
+          onSubmitted();
+        } else {
+          setSubmitted(true);
+        }
         return;
       }
 
       throw new Error(data.error || "Something went wrong");
     } catch (err) {
       if (err instanceof Error && err.message.includes("mock")) {
-        setSubmitted(true);
+        if (onSubmitted) {
+          onSubmitted();
+        } else {
+          setSubmitted(true);
+        }
         return;
       }
       setError(err instanceof Error ? err.message : "Something went wrong");
