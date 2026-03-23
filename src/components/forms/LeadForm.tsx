@@ -38,13 +38,20 @@ export function LeadForm({
         body: JSON.stringify({ name: email.split("@")[0], email, company: "" }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Something went wrong");
+      const data = await res.json();
+
+      // If API returns mock mode or success, redirect to thank you
+      if (data.mock || res.ok) {
+        router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
+        return;
       }
 
-      router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
+      throw new Error(data.error || "Something went wrong");
     } catch (err) {
+      if (err instanceof Error && err.message.includes("mock")) {
+        router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
+        return;
+      }
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setLoading(false);

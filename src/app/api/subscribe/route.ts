@@ -20,6 +20,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Mock mode: if Listmonk is not configured, skip the API call
+    if (!process.env.LISTMONK_URL || process.env.LISTMONK_URL === "http://localhost:9000") {
+      console.log(`[MOCK] Would subscribe: ${email}`);
+      return NextResponse.json({ success: true, mock: true });
+    }
+
     const listId = parseInt(
       process.env.LISTMONK_BLUEPRINT_LIST_ID || "1",
       10
