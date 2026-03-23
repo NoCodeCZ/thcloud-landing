@@ -173,12 +173,12 @@ export function DemoForm({
             <label className={labelCls}>{s.s2.aiExperienceLabel} *</label>
             <div className="space-y-2">
               {s.s2.aiExperiences.map((exp: string) => (
-                <label key={exp} className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${formData.aiExperience === exp ? "border-brand-navy bg-brand-navy" : "border-gray-300 group-hover:border-gray-400"}`}>
+                <button key={exp} type="button" onClick={() => update("aiExperience", exp)} className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl border transition-colors ${formData.aiExperience === exp ? "border-brand-navy bg-brand-navy/5" : "border-gray-200 hover:border-gray-300"}`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${formData.aiExperience === exp ? "border-brand-navy bg-brand-navy" : "border-gray-300"}`}>
                     {formData.aiExperience === exp && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <span className="text-sm text-brand-title font-[family-name:var(--font-prompt)]">{exp}</span>
-                </label>
+                </button>
               ))}
             </div>
           </div>
@@ -197,16 +197,18 @@ export function DemoForm({
                 <tbody>
                   {s.s2.departments.map((dept: string) => (
                     <tr key={dept} className="border-t border-gray-50">
-                      <td className="py-2 pr-2 text-brand-title font-[family-name:var(--font-prompt)]">{dept}</td>
+                      <td className="py-2.5 pr-2 text-brand-title font-[family-name:var(--font-prompt)] text-xs">{dept}</td>
                       {s.s2.priorityLevels.map((level: string) => (
-                        <td key={level} className="text-center py-2 px-1">
+                        <td key={level} className="text-center py-2.5 px-1">
                           <button
                             type="button"
                             onClick={() => setDeptPriority(dept, level)}
-                            className={`w-5 h-5 rounded-full border-2 transition-colors ${
-                              (formData.departmentPriorities || {})[dept] === level ? "border-brand-navy bg-brand-navy" : "border-gray-300 hover:border-gray-400"
-                            }`}
-                          />
+                            className="w-8 h-8 rounded-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+                          >
+                            <div className={`w-5 h-5 rounded-full border-2 transition-colors ${
+                              (formData.departmentPriorities || {})[dept] === level ? "border-brand-navy bg-brand-navy" : "border-gray-300"
+                            }`} />
+                          </button>
                         </td>
                       ))}
                     </tr>
@@ -263,12 +265,12 @@ export function DemoForm({
             <label className={labelCls}>{s.s3.flexibilityLabel} *</label>
             <div className="space-y-2">
               {s.s3.flexibilities.map((f: string) => (
-                <label key={f} className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${formData.flexibility === f ? "border-brand-navy bg-brand-navy" : "border-gray-300 group-hover:border-gray-400"}`}>
+                <button key={f} type="button" onClick={() => update("flexibility", f)} className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl border transition-colors ${formData.flexibility === f ? "border-brand-navy bg-brand-navy/5" : "border-gray-200 hover:border-gray-300"}`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${formData.flexibility === f ? "border-brand-navy bg-brand-navy" : "border-gray-300"}`}>
                     {formData.flexibility === f && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <span className="text-sm text-brand-title font-[family-name:var(--font-prompt)]">{f}</span>
-                </label>
+                </button>
               ))}
             </div>
           </div>
@@ -280,12 +282,12 @@ export function DemoForm({
             <label className={labelCls}>{s.s3.itTeamLabel} *</label>
             <div className="space-y-2">
               {s.s3.itTeams.map((it: string) => (
-                <label key={it} className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${formData.itTeam === it ? "border-brand-navy bg-brand-navy" : "border-gray-300 group-hover:border-gray-400"}`}>
+                <button key={it} type="button" onClick={() => update("itTeam", it)} className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl border transition-colors ${formData.itTeam === it ? "border-brand-navy bg-brand-navy/5" : "border-gray-200 hover:border-gray-300"}`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${formData.itTeam === it ? "border-brand-navy bg-brand-navy" : "border-gray-300"}`}>
                     {formData.itTeam === it && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <span className="text-sm text-brand-title font-[family-name:var(--font-prompt)]">{it}</span>
-                </label>
+                </button>
               ))}
             </div>
           </div>
@@ -293,12 +295,12 @@ export function DemoForm({
             <label className={labelCls}>{s.s3.trainingLabel} *</label>
             <div className="space-y-2">
               {s.s3.trainings.map((tr: string) => (
-                <label key={tr} className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${formData.training === tr ? "border-brand-navy bg-brand-navy" : "border-gray-300 group-hover:border-gray-400"}`}>
+                <button key={tr} type="button" onClick={() => update("training", tr)} className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl border transition-colors ${formData.training === tr ? "border-brand-navy bg-brand-navy/5" : "border-gray-200 hover:border-gray-300"}`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${formData.training === tr ? "border-brand-navy bg-brand-navy" : "border-gray-300"}`}>
                     {formData.training === tr && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <span className="text-sm text-brand-title font-[family-name:var(--font-prompt)]">{tr}</span>
-                </label>
+                </button>
               ))}
             </div>
           </div>
@@ -323,12 +325,12 @@ export function DemoForm({
             <label className={labelCls}>{s.s4.timelineLabel} *</label>
             <div className="space-y-2">
               {s.s4.timelines.map((tl: string) => (
-                <label key={tl} className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${formData.timeline === tl ? "border-brand-navy bg-brand-navy" : "border-gray-300 group-hover:border-gray-400"}`}>
+                <button key={tl} type="button" onClick={() => update("timeline", tl)} className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl border transition-colors ${formData.timeline === tl ? "border-brand-navy bg-brand-navy/5" : "border-gray-200 hover:border-gray-300"}`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${formData.timeline === tl ? "border-brand-navy bg-brand-navy" : "border-gray-300"}`}>
                     {formData.timeline === tl && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <span className="text-sm text-brand-title font-[family-name:var(--font-prompt)]">{tl}</span>
-                </label>
+                </button>
               ))}
             </div>
           </div>
@@ -336,12 +338,12 @@ export function DemoForm({
             <label className={labelCls}>{s.s4.authorityLabel} *</label>
             <div className="space-y-2">
               {s.s4.authorities.map((a: string) => (
-                <label key={a} className="flex items-center gap-2.5 cursor-pointer group">
-                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${formData.authority === a ? "border-brand-navy bg-brand-navy" : "border-gray-300 group-hover:border-gray-400"}`}>
+                <button key={a} type="button" onClick={() => update("authority", a)} className={`flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl border transition-colors ${formData.authority === a ? "border-brand-navy bg-brand-navy/5" : "border-gray-200 hover:border-gray-300"}`}>
+                  <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${formData.authority === a ? "border-brand-navy bg-brand-navy" : "border-gray-300"}`}>
                     {formData.authority === a && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                   </div>
                   <span className="text-sm text-brand-title font-[family-name:var(--font-prompt)]">{a}</span>
-                </label>
+                </button>
               ))}
             </div>
           </div>
