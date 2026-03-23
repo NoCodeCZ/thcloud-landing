@@ -4,7 +4,8 @@ import { locales, type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { FacebookCAPI } from "@/components/tracking/FacebookCAPI";
-import { CheckCircle2, Calendar, Play, ArrowRight } from "lucide-react";
+import { DemoForm } from "@/components/forms/DemoForm";
+import { CheckCircle2, Monitor } from "lucide-react";
 
 export async function generateMetadata({
   params,
@@ -37,7 +38,7 @@ export default async function ThankYouPage({
   }
 
   return (
-    <main className="min-h-screen bg-brand-dark text-white flex flex-col">
+    <main className="min-h-screen bg-brand-dark text-white">
       <header className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
         <Link href={`/${locale}`}>
           <span className="font-[family-name:var(--font-bai-jamjuree)] font-bold text-xl text-white">
@@ -47,75 +48,69 @@ export default async function ThankYouPage({
         <LanguageSwitcher locale={locale as Locale} />
       </header>
 
-      <div className="flex-1 flex items-center justify-center px-6 py-12 md:py-16">
-        <div className="max-w-lg w-full space-y-10">
-          {/* Confirmation */}
-          <div className="text-center space-y-4">
-            <div className="w-16 h-16 rounded-full bg-green-500/10 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8 text-green-400" />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-medium">{t.title}</h1>
-            <p className="text-white/50 font-[family-name:var(--font-prompt)]">
-              {t.subtitle}
-            </p>
-          </div>
+      <div className="px-6 py-8 md:py-12">
+        <div className="max-w-4xl mx-auto">
+          {/* Top: confirmation + form side by side */}
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
 
-          {/* Next step options */}
-          <div className="space-y-4">
-            <p className="text-xs uppercase tracking-widest text-white/30 font-medium text-center">
-              {t.nextStepTitle}
-            </p>
-
-            {/* Option 1: Book a Demo */}
-            <a
-              href={t.options.demo.href}
-              className="block w-full bg-white rounded-2xl p-6 group hover:scale-[1.02] transition-transform duration-200"
-            >
+            {/* Left: confirmation + demo pitch */}
+            <div className="flex-1 space-y-8">
+              {/* Confirmation */}
               <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-xl bg-brand-navy/10 flex items-center justify-center shrink-0">
-                  <Calendar className="w-5 h-5 text-brand-navy" />
+                <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="w-6 h-6 text-green-400" />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-base font-medium text-brand-title">
-                      {t.options.demo.label}
-                    </h3>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand-navy text-white font-medium">
-                      {t.options.demo.badge}
-                    </span>
+                <div>
+                  <h1 className="text-2xl md:text-3xl font-medium">{t.title}</h1>
+                  <p className="text-white/50 font-[family-name:var(--font-prompt)] mt-1">
+                    {t.subtitle}
+                  </p>
+                </div>
+              </div>
+
+              <div className="h-px bg-white/10" />
+
+              {/* Demo pitch */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-500/10 flex items-center justify-center">
+                    <Monitor className="w-5 h-5 text-indigo-400" />
                   </div>
-                  <p className="text-sm text-brand-subtitle font-[family-name:var(--font-prompt)] leading-relaxed">
-                    {t.options.demo.description}
-                  </p>
+                  <h2 className="text-xl font-medium">{t.demoTitle}</h2>
                 </div>
-                <ArrowRight className="w-5 h-5 text-brand-navy/30 group-hover:text-brand-navy group-hover:translate-x-1 transition-all shrink-0 mt-3" />
+                <p className="text-sm text-white/50 font-[family-name:var(--font-prompt)] leading-relaxed pl-[52px]">
+                  {t.demoSubtitle}
+                </p>
               </div>
-            </a>
 
-            {/* Option 2: Watch Webinar */}
-            <Link
-              href={`/${locale}/webinar`}
-              className="block w-full bg-white/[0.04] border border-white/10 rounded-2xl p-6 group hover:border-white/20 hover:bg-white/[0.06] transition-all duration-200"
-            >
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-xl bg-indigo-500/10 flex items-center justify-center shrink-0">
-                  <Play className="w-5 h-5 text-indigo-400" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-medium text-white mb-1">
-                    {t.options.webinar.label}
-                  </h3>
-                  <p className="text-sm text-white/40 font-[family-name:var(--font-prompt)] leading-relaxed">
-                    {t.options.webinar.description}
-                  </p>
-                </div>
-                <ArrowRight className="w-5 h-5 text-white/20 group-hover:text-white/40 group-hover:translate-x-1 transition-all shrink-0 mt-3" />
+              {/* What you'll see in the demo */}
+              <div className="pl-[52px] space-y-3">
+                {[
+                  locale === "th" ? "Dashboard สดดึงข้อมูลทุกช่องทาง" : "Live dashboards pulling data from all channels",
+                  locale === "th" ? "AI Agent ตอบคำถามจากข้อมูลธุรกิจจริง" : "AI agents answering questions from your real business data",
+                  locale === "th" ? "ระบบ Workflow อัตโนมัติทำงานจริง" : "Automated workflows running in real time",
+                  locale === "th" ? "แผนการติดตั้งเฉพาะสำหรับธุรกิจคุณ" : "Implementation plan tailored to your business",
+                ].map((item, i) => (
+                  <div key={i} className="flex gap-2.5 items-start">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-400/50 mt-1.5 shrink-0" />
+                    <p className="text-xs text-white/40 font-[family-name:var(--font-prompt)]">{item}</p>
+                  </div>
+                ))}
               </div>
-            </Link>
+            </div>
+
+            {/* Right: pre-qualification form */}
+            <div className="w-full lg:max-w-md shrink-0">
+              <DemoForm
+                translations={t.demoForm}
+                submittedTranslations={t.submitted}
+                defaultEmail={email}
+              />
+            </div>
           </div>
 
           {/* Back link */}
-          <div className="text-center pt-2">
+          <div className="text-center pt-10">
             <Link
               href={`/${locale}`}
               className="text-sm text-white/20 hover:text-white/40 transition-colors"
@@ -126,7 +121,6 @@ export default async function ThankYouPage({
         </div>
       </div>
 
-      {/* Client-side pixel fallback + server CAPI tracking */}
       <FacebookCAPI email={email} />
     </main>
   );
@@ -167,6 +161,6 @@ async function fireServerCAPI(email: string) {
       }
     );
   } catch {
-    // Silently fail — don't block the page
+    // Silently fail
   }
 }
