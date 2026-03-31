@@ -1,4 +1,5 @@
 import { IBM_Plex_Sans_Thai, Prompt, Bai_Jamjuree } from "next/font/google";
+import { FacebookPixel } from "@/components/tracking/FacebookPixel";
 import "./globals.css";
 
 const ibmPlexSansThai = IBM_Plex_Sans_Thai({
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${ibmPlexSansThai.variable} ${prompt.variable} ${baiJamjuree.variable} antialiased bg-brand-dark text-white`}
       >
+        <FacebookPixel pixelId={process.env.NEXT_PUBLIC_FB_PIXEL_ID || ""} />
         {children}
       </body>
     </html>

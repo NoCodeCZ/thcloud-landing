@@ -2,8 +2,113 @@
 
 import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { fbqTrack } from "@/components/tracking/FacebookCAPI";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+interface StepSection {
+  title: string;
+  subtitle?: string;
+  [key: string]: string | readonly string[] | undefined;
+}
+
+interface DemoFormTranslations {
+  intro: string;
+  sections: {
+    s1: StepSection & {
+      nameLabel: string;
+      namePlaceholder: string;
+      roleLabel: string;
+      rolePlaceholder: string;
+      companyLabel: string;
+      companyPlaceholder: string;
+      industryLabel: string;
+      industryPlaceholder: string;
+      industries: readonly string[];
+      companySizeLabel: string;
+      companySizePlaceholder: string;
+      companySizes: readonly string[];
+      phoneLabel: string;
+      phonePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      lineLabel: string;
+      linePlaceholder: string;
+    };
+    s2: StepSection & {
+      aiExperienceLabel: string;
+      aiExperiences: readonly string[];
+      departmentsLabel: string;
+      departments: readonly string[];
+      priorityLevels: readonly string[];
+      mainProblemLabel: string;
+      mainProblems: readonly string[];
+      expectedResultLabel: string;
+      expectedResultPlaceholder: string;
+      kpiLabel: string;
+      kpiPlaceholder: string;
+    };
+    s3: StepSection & {
+      currentSoftwareLabel: string;
+      currentSoftwarePlaceholder: string;
+      dataStorageLabel: string;
+      dataStorages: readonly string[];
+      flexibilityLabel: string;
+      flexibilities: readonly string[];
+      securityLabel: string;
+      securityPlaceholder: string;
+      itTeamLabel: string;
+      itTeams: readonly string[];
+      trainingLabel: string;
+      trainings: readonly string[];
+    };
+    s4: StepSection & {
+      budgetLabel: string;
+      budgetPlaceholder: string;
+      budgets: readonly string[];
+      timelineLabel: string;
+      timelines: readonly string[];
+      authorityLabel: string;
+      authorities: readonly string[];
+    };
+    s5: StepSection & {
+      sourceLabel: string;
+      sources: readonly string[];
+      notesLabel: string;
+      notesPlaceholder: string;
+    };
+  };
+  next: string;
+  back: string;
+  submit: string;
+  submitting: string;
+  footer: string;
+}
+
+interface DemoFormData {
+  email: string;
+  name?: string;
+  role?: string;
+  company?: string;
+  industry?: string;
+  companySize?: string;
+  phone?: string;
+  lineId?: string;
+  aiExperience?: string;
+  departmentPriorities: Record<string, string>;
+  mainProblems: string[];
+  expectedResult?: string;
+  kpi?: string;
+  currentSoftware?: string;
+  dataStorages: string[];
+  flexibility?: string;
+  security?: string;
+  itTeam?: string;
+  training?: string;
+  budget?: string;
+  timeline?: string;
+  authority?: string;
+  source?: string;
+  notes?: string;
+}
 
 export function DemoForm({
   translations,
@@ -11,7 +116,7 @@ export function DemoForm({
   defaultEmail,
   onSubmitted,
 }: {
-  translations: any;
+  translations: DemoFormTranslations;
   submittedTranslations: { title: string; subtitle: string };
   defaultEmail?: string;
   onSubmitted?: () => void;
@@ -22,22 +127,22 @@ export function DemoForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [formData, setFormData] = useState<Record<string, any>>({
+  const [formData, setFormData] = useState<DemoFormData>({
     email: defaultEmail || "",
-    departmentPriorities: {} as Record<string, string>,
-    mainProblems: [] as string[],
-    dataStorages: [] as string[],
+    departmentPriorities: {},
+    mainProblems: [],
+    dataStorages: [],
   });
 
   const totalSteps = 5;
 
-  function update(key: string, value: any) {
+  function update<K extends keyof DemoFormData>(key: K, value: DemoFormData[K]) {
     setFormData((prev) => ({ ...prev, [key]: value }));
   }
 
-  function toggleArrayItem(key: string, item: string) {
+  function toggleArrayItem(key: "mainProblems" | "dataStorages", item: string) {
     setFormData((prev) => {
-      const arr = (prev[key] || []) as string[];
+      const arr = prev[key];
       return {
         ...prev,
         [key]: arr.includes(item) ? arr.filter((x) => x !== item) : [...arr, item],
@@ -64,6 +169,7 @@ export function DemoForm({
       });
       const data = await res.json();
       if (data.mock || res.ok) {
+        fbqTrack("SubmitApplication", { content_name: "Demo Request" });
         if (onSubmitted) {
           onSubmitted();
         } else {

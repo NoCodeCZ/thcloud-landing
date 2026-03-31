@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { locales, type Locale } from "@/i18n/config";
+import { type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
-import { FacebookCAPI } from "@/components/tracking/FacebookCAPI";
 import { CheckCircle2, Monitor, ArrowRight } from "lucide-react";
 
 export async function generateMetadata({
@@ -30,10 +29,6 @@ export default async function ThankYouPage({
   const { email } = await searchParams;
   const dict = await getDictionary(locale as Locale);
   const t = dict.thankYou;
-
-  if (email) {
-    fireServerCAPI(email).catch(() => {});
-  }
 
   return (
     <main className="min-h-screen bg-brand-dark text-white flex flex-col">
@@ -91,40 +86,6 @@ export default async function ThankYouPage({
         </div>
       </div>
 
-      <FacebookCAPI email={email} />
     </main>
   );
-}
-
-async function fireServerCAPI(email: string) {
-  const pixelId = process.env.FB_PIXEL_ID;
-  const accessToken = process.env.FB_CAPI_ACCESS_TOKEN;
-
-  if (!pixelId || !accessToken) return;
-
-  const crypto = await import("crypto");
-  const hashedEmail = crypto
-    .createHash("sha256")
-    .update(email.toLowerCase().trim())
-    .digest("hex");
-
-  try {
-    await fetch(
-      `https://graph.facebook.com/v21.0/${pixelId}/events?access_token=${accessToken}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          data: [{
-            event_name: "CompleteRegistration",
-            event_time: Math.floor(Date.now() / 1000),
-            action_source: "website",
-            user_data: { em: [hashedEmail] },
-          }],
-        }),
-      }
-    );
-  } catch {
-    // Silently fail
-  }
 }

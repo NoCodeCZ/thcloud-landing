@@ -4,11 +4,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { Monitor, Calendar, Check } from "lucide-react";
 import { DemoForm } from "./DemoForm";
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { fbqTrack } from "@/components/tracking/FacebookCAPI";
 
 export function DemoPageClient({
-  locale,
   defaultEmail,
   formTranslations,
   submittedTranslations,
@@ -20,10 +18,12 @@ export function DemoPageClient({
   backHref,
   step1Label,
   step2Label,
+  seeInDemoLabel,
+  pickTimeLabel,
+  pickTimeSubtitleLabel,
 }: {
-  locale: string;
   defaultEmail?: string;
-  formTranslations: any;
+  formTranslations: Parameters<typeof DemoForm>[0]["translations"];
   submittedTranslations: { title: string; subtitle: string };
   demoTitle: string;
   demoSubtitle: string;
@@ -33,6 +33,9 @@ export function DemoPageClient({
   backHref: string;
   step1Label: string;
   step2Label: string;
+  seeInDemoLabel: string;
+  pickTimeLabel: string;
+  pickTimeSubtitleLabel: string;
 }) {
   const [phase, setPhase] = useState<"form" | "calendar">("form");
 
@@ -84,7 +87,7 @@ export function DemoPageClient({
 
               <div className="space-y-3 pt-2">
                 <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 font-medium">
-                  {locale === "th" ? "สิ่งที่คุณจะเห็นใน Demo" : "What you'll see in the demo"}
+                  {seeInDemoLabel}
                 </p>
                 {demoFeatures.map((item, i) => (
                   <div key={i} className="flex gap-3 items-start">
@@ -103,7 +106,10 @@ export function DemoPageClient({
                 translations={formTranslations}
                 submittedTranslations={submittedTranslations}
                 defaultEmail={defaultEmail}
-                onSubmitted={() => setPhase("calendar")}
+                onSubmitted={() => {
+                  fbqTrack("Schedule", { content_name: "Demo Calendar" });
+                  setPhase("calendar");
+                }}
               />
             </div>
           </div>
@@ -114,12 +120,10 @@ export function DemoPageClient({
                 <Calendar className="w-6 h-6 text-green-400" />
               </div>
               <h2 className="text-2xl font-medium">
-                {locale === "th" ? "เลือกเวลาที่สะดวก" : "Pick a time that works"}
+                {pickTimeLabel}
               </h2>
               <p className="text-sm text-white/40 font-[family-name:var(--font-prompt)]">
-                {locale === "th"
-                  ? "เลือกวันเวลาจากปฏิทินด้านล่าง เราจะยืนยันทางอีเมล"
-                  : "Choose a date and time below. We'll confirm via email."}
+                {pickTimeSubtitleLabel}
               </p>
             </div>
 

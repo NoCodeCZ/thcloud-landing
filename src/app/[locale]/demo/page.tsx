@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { locales, type Locale } from "@/i18n/config";
+import { type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { DemoPageClient } from "@/components/forms/DemoPageClient";
@@ -13,7 +13,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const dict = await getDictionary(locale as Locale);
   return {
-    title: locale === "th" ? "จองนัด Demo Call | THCloud.AI" : "Book a Demo Call | THCloud.AI",
+    title: dict.demo.title,
     description: dict.metadata.home.description,
   };
 }
@@ -42,32 +42,20 @@ export default async function DemoPage({
       </header>
 
       <DemoPageClient
-        locale={locale}
         defaultEmail={email}
         formTranslations={t.demoForm}
         submittedTranslations={t.submitted}
         demoTitle={t.demoTitle}
         demoSubtitle={t.demoSubtitle}
         calUrl="https://cal.tonghuagroup.com/tatchat"
-        demoFeatures={
-          locale === "th"
-            ? [
-                "Dashboard สดดึงข้อมูลทุกช่องทาง",
-                "AI Agent ตอบคำถามจากข้อมูลธุรกิจจริง",
-                "ระบบ Workflow อัตโนมัติทำงานจริง",
-                "แผนการติดตั้งเฉพาะสำหรับธุรกิจคุณ",
-              ]
-            : [
-                "Live dashboards pulling data from all channels",
-                "AI agents answering questions from real business data",
-                "Automated workflows running in real time",
-                "Implementation plan tailored to your business",
-              ]
-        }
+        demoFeatures={[...dict.demo.demoFeatures]}
         backLabel={t.backHome}
         backHref={`/${locale}`}
-        step1Label={locale === "th" ? "กรอกข้อมูล" : "Your Info"}
-        step2Label={locale === "th" ? "เลือกเวลา" : "Pick a Time"}
+        step1Label={dict.demo.step1Label}
+        step2Label={dict.demo.step2Label}
+        seeInDemoLabel={dict.demo.seeInDemo}
+        pickTimeLabel={dict.demo.pickTime}
+        pickTimeSubtitleLabel={dict.demo.pickTimeSubtitle}
       />
     </main>
   );

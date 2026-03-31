@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { locales, type Locale } from "@/i18n/config";
+import { type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { LeadForm } from "@/components/forms/LeadForm";
 import { TrustLogos } from "@/components/sections/TrustLogos";
@@ -105,7 +105,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section className="px-6 py-16 md:py-24 border-t border-white/5">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">Target audience</p>
+            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">{t.sectionLabels.targetAudience}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-10">{t.whoIsFor.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {t.whoIsFor.items.map((item, i) => (
@@ -126,7 +126,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section id="problem" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-red-400/40 mb-3 font-medium">The challenge</p>
+            <p className="text-xs uppercase tracking-widest text-red-400/40 mb-3 font-medium">{t.sectionLabels.theChallenge}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-12">{t.coreProblem.title}</h2>
             <div className="space-y-6">
               {t.coreProblem.problems.map((p, i) => {
@@ -165,7 +165,7 @@ export default async function Home({
         <section id="solution" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.02] to-transparent pointer-events-none" />
           <div className="relative max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">Our solution</p>
+            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">{t.sectionLabels.ourSolution}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-3">{t.whatWeBuild.title}</h2>
             <p className="text-white/50 mb-14 font-[family-name:var(--font-prompt)]">{t.whatWeBuild.subtitle}</p>
 
@@ -261,7 +261,7 @@ export default async function Home({
                     {"agentExamples" in layer && layer.agentExamples && (
                       <div className="bg-gradient-to-br from-indigo-500/[0.04] to-transparent rounded-xl p-5 border border-indigo-500/10">
                         <p className="text-[10px] uppercase tracking-[0.2em] text-indigo-300/40 mb-3 font-medium">
-                          AI Agent Examples
+                          {t.sectionLabels.aiAgentExamples}
                         </p>
                         <div className="space-y-2.5">
                           {layer.agentExamples.map((ex, j) => (
@@ -277,7 +277,7 @@ export default async function Home({
                     {"teamFeatures" in layer && layer.teamFeatures && (
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                         <div className="bg-white/[0.02] rounded-xl p-5 border border-white/5">
-                          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-4 font-medium">Your team gets</p>
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-4 font-medium">{t.sectionLabels.yourTeamGets}</p>
                           <ul className="space-y-2.5">
                             {layer.teamFeatures.map((f, j) => (
                               <li key={j} className="text-xs text-white/50 font-[family-name:var(--font-prompt)] flex gap-2 items-start">
@@ -288,7 +288,7 @@ export default async function Home({
                           </ul>
                         </div>
                         <div className="bg-white/[0.02] rounded-xl p-5 border border-white/5">
-                          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-4 font-medium">You control</p>
+                          <p className="text-[10px] uppercase tracking-[0.2em] text-white/25 mb-4 font-medium">{t.sectionLabels.youControl}</p>
                           <ul className="space-y-2.5">
                             {("adminFeatures" in layer ? layer.adminFeatures : []).map((f, j) => (
                               <li key={j} className="text-xs text-white/50 font-[family-name:var(--font-prompt)] flex gap-2 items-start">
@@ -321,7 +321,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section id="timeline" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">Implementation</p>
+            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">{t.sectionLabels.implementation}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-8">{t.timeline.title}</h2>
 
             {/* Timeline overview visual */}
@@ -363,7 +363,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section className="px-6 py-16 md:py-24 border-t border-white/5">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-green-400/40 mb-3 font-medium">Results</p>
+            <p className="text-xs uppercase tracking-widest text-green-400/40 mb-3 font-medium">{t.sectionLabels.results}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-8">{t.beforeAfter.title}</h2>
 
             {/* Before/After visual */}
@@ -400,7 +400,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section className="px-6 py-16 md:py-24 border-t border-white/5">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">Why us</p>
+            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">{t.sectionLabels.whyUs}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-10">{t.differentiators.title}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {t.differentiators.items.map((item, i) => {
@@ -424,7 +424,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section id="stack" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">Technology</p>
+            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">{t.sectionLabels.technology}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-8">{t.stack.title}</h2>
 
             {/* Architecture diagram */}
@@ -466,7 +466,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section id="faq" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
           <div className="max-w-3xl mx-auto">
-            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">FAQ</p>
+            <p className="text-xs uppercase tracking-widest text-indigo-300/40 mb-3 font-medium">{t.sectionLabels.faq}</p>
             <h2 className="text-2xl md:text-3xl font-medium mb-10">{t.faq.title}</h2>
             <div className="space-y-3">
               {t.faq.items.map((item, i) => (
@@ -528,9 +528,9 @@ export default async function Home({
               THCloud.AI
             </span>
             <p className="text-[10px] text-white/15 font-[family-name:var(--font-prompt)]">
-              Built on open-source infrastructure &middot; Deployable anywhere &middot; You own the system
+              {t.footer.tagline}
             </p>
-            <p className="text-[10px] text-white/10">&copy; 2026 THCloud.AI &middot; Tong Hua Holding PCL (SET:TH)</p>
+            <p className="text-[10px] text-white/10">{t.footer.copyright}</p>
           </div>
         </footer>
       </main>

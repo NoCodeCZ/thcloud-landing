@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { fbqTrack } from "@/components/tracking/FacebookCAPI";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,6 +115,7 @@ export function WebinarForm({
         throw new Error(data.error || "Something went wrong");
       }
 
+      fbqTrack("CompleteRegistration", { content_name: "Webinar Registration" });
       setSubmittedEmail(email);
       setSubmitted(true);
     } catch (err) {

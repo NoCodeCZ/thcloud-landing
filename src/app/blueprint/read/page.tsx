@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { TopBar } from "@/components/layout/TopBar";
 import { EbookContainer } from "@/components/ebook/EbookContainer";
 import { WebinarPopup } from "@/components/sections/WebinarPopup";
+import { ViewContentTracker } from "@/components/tracking/ViewContentTracker";
 
 export const metadata: Metadata = {
   title: "Your Blueprint Is Ready | THCloud.AI",
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 export default function BlueprintReadPage() {
   return (
     <main className="min-h-screen bg-brand-dark">
+      <ViewContentTracker contentName="AI Transformation Blueprint" />
       <TopBar actionLabel="Download PDF" actionHref="/blueprint.pdf" />
 
       {/* Hero */}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOrUpdateSubscriber } from "@/lib/listmonk";
+import { fireServerEvent } from "@/lib/fb-capi";
 
 export async function POST(request: NextRequest) {
   try {
@@ -54,6 +55,16 @@ export async function POST(request: NextRequest) {
       notes: body.notes || "",
       formType: "demo-request",
     });
+
+    fireServerEvent({
+      eventName: "SubmitApplication",
+      email,
+      customData: {
+        content_name: "Demo Request",
+        industry: body.industry || "",
+        company_size: body.companySize || "",
+      },
+    }).catch(() => {});
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { fbqTrack } from "@/components/tracking/FacebookCAPI";
 
 export function LeadForm({
   translations,
@@ -42,6 +43,7 @@ export function LeadForm({
 
       // If API returns mock mode or success, redirect to thank you
       if (data.mock || res.ok) {
+        fbqTrack("Lead", { content_name: "AI Transformation Blueprint" });
         router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
         return;
       }
