@@ -5,7 +5,7 @@ import { LeadForm } from "@/components/forms/LeadForm";
 import { TrustLogos } from "@/components/sections/TrustLogos";
 import { StickyCTA } from "@/components/sections/StickyCTA";
 import { Navbar } from "@/components/layout/Navbar";
-import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
+import Image from "next/image";
 import {
   Database,
   BarChart3,
@@ -82,10 +82,13 @@ export default async function Home({
               </p>
               {/* Hero visual */}
               <div className="max-w-lg mx-auto lg:mx-0">
-                <ImagePlaceholder
-                  label="Hero Image"
-                  aspect="wide"
-                  hint="Dashboard mockup, before/after diagram, or product screenshot"
+                <Image
+                  src="/hero-image.png"
+                  alt="เปลียนข้อมูลที่กระจัดกระจายให้กลายเป็นระบบธุรกิจ"
+                  width={1200}
+                  height={514}
+                  className="w-full rounded-2xl"
+                  priority
                 />
               </div>
             </div>
@@ -198,16 +201,18 @@ export default async function Home({
 
                     {/* Layer visual */}
                     <div className="mb-6">
-                      <ImagePlaceholder
-                        label={`Layer ${layer.number} Visual`}
-                        aspect="video"
-                        hint={
+                      <Image
+                        src={
                           i === 0
-                            ? "Data flow diagram or warehouse architecture visual"
+                            ? "/data-foundation.png"
                             : i === 1
-                            ? "Dashboard screenshot or AI agent conversation demo"
-                            : "OpenWebUI interface screenshot with team workspace"
+                            ? "/data-intelligence.png"
+                            : "/ai-interface.png"
                         }
+                        alt={layer.name}
+                        width={1200}
+                        height={675}
+                        className="w-full rounded-2xl"
                       />
                     </div>
 
@@ -326,10 +331,12 @@ export default async function Home({
 
             {/* Timeline overview visual */}
             <div className="mb-12">
-              <ImagePlaceholder
-                label="Timeline Infographic"
-                aspect="wide"
-                hint="10-week roadmap visual: Discovery → Setup → Data → Dashboards → AI → Handover"
+              <Image
+                src="/process-implement.png"
+                alt="แผนการดำเนินงาน — ทีละขั้นตอน"
+                width={1200}
+                height={514}
+                className="w-full rounded-2xl"
               />
             </div>
 
@@ -368,10 +375,12 @@ export default async function Home({
 
             {/* Before/After visual */}
             <div className="mb-10">
-              <ImagePlaceholder
-                label="Before & After Visual"
-                aspect="wide"
-                hint="Side-by-side comparison: messy spreadsheets vs clean AI dashboard"
+              <Image
+                src="/results.png"
+                alt="อะไรเปลียน หลังจากนี้ — Before & After"
+                width={1200}
+                height={514}
+                className="w-full rounded-2xl"
               />
             </div>
 
@@ -429,10 +438,12 @@ export default async function Home({
 
             {/* Architecture diagram */}
             <div className="mb-10">
-              <ImagePlaceholder
-                label="Architecture Diagram"
-                aspect="video"
-                hint="Full stack diagram showing how all tools connect: Data → Intelligence → Interface"
+              <Image
+                src="/tech-stack.png"
+                alt="Tech Stack ที่ขับเคลื่อนระบบ"
+                width={1200}
+                height={675}
+                className="w-full rounded-2xl"
               />
             </div>
 
