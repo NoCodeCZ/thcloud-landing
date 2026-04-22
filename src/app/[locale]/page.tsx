@@ -126,8 +126,8 @@ export default async function Home({
                 </div>
               </div>
             </div>
-            <div className="w-full max-w-md shrink-0 scroll-mt-24" id="lead-form-hero">
-              <LeadForm translations={t.form} locale={locale} />
+            <div className="w-full max-w-xl shrink-0 scroll-mt-24" id="lead-form-hero">
+              <LeadForm translations={t.form} locale={locale} collapsible progressive />
             </div>
           </div>
         </section>
@@ -534,7 +534,7 @@ export default async function Home({
         ═══════════════════════════════════════════════════════ */}
         <section className="px-6 py-20 md:py-28 border-t border-white/5 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/[0.03] to-transparent pointer-events-none" />
-          <div className="relative max-w-xl mx-auto text-center space-y-8">
+          <div className="relative max-w-3xl mx-auto text-center space-y-8">
             <p className="max-w-md mx-auto text-sm text-white/58 font-[family-name:var(--font-prompt)] leading-relaxed">
               {t.credibility.line}
             </p>
@@ -547,7 +547,7 @@ export default async function Home({
             </p>
 
             <div className="flex justify-center pt-2 scroll-mt-24" id="lead-form-final">
-              <LeadForm translations={t.form} locale={locale} variant="dark" />
+              <LeadForm translations={t.form} locale={locale} collapsible />
             </div>
 
             <div className="pt-4">

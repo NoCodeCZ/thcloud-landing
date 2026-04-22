@@ -1,53 +1,81 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { LoaderCircle, ShieldCheck, Sparkles } from "lucide-react";
 import { useId, useState } from "react";
-import { useRouter } from "next/navigation";
 import { fbqTrack } from "@/components/tracking/FacebookCAPI";
+
+type LeadFormTranslations = {
+  emailLabel: string;
+  emailPlaceholder: string;
+  submit: string;
+  submitting: string;
+  footer: string;
+  defaultBadge: string;
+  defaultTitle: string;
+  defaultIntro: string;
+  requiredHint: string;
+  firstNameLabel: string;
+  firstNamePlaceholder: string;
+  lastNameLabel: string;
+  lastNamePlaceholder: string;
+  phoneLabel: string;
+  phonePlaceholder: string;
+  companyLabel: string;
+  companyPlaceholder: string;
+  companySizeLabel: string;
+  companySizePlaceholder: string;
+  companySizes: readonly string[];
+  industryLabel: string;
+  industryPlaceholder: string;
+  industries: readonly string[];
+  roleLabel: string;
+  rolePlaceholder: string;
+  roles: readonly string[];
+  consentLabel: string;
+  consentHint: string;
+  privacyText: string;
+  reassurance: string;
+  expandCta: string;
+  progressiveHint: string;
+  optionalDetailsCta: string;
+  optionalDetailsHideCta: string;
+};
 
 export function LeadForm({
   translations,
   locale,
   variant = "default",
+  collapsible = false,
+  progressive = false,
 }: {
-  translations: {
-    emailLabel: string;
-    emailPlaceholder: string;
-    submit: string;
-    submitting: string;
-    footer: string;
-  };
+  translations: LeadFormTranslations;
   locale: string;
   variant?: "default" | "inline" | "dark";
+  collapsible?: boolean;
+  progressive?: boolean;
 }) {
   const t = translations;
-  const isThai = locale === "th";
   const router = useRouter();
   const emailFieldId = useId();
   const errorId = useId();
+  const firstNameId = useId();
+  const lastNameId = useId();
+  const phoneId = useId();
+  const companyId = useId();
+  const companySizeId = useId();
+  const industryId = useId();
+  const roleId = useId();
+  const consentId = useId();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const formCopy = isThai
-    ? {
-        badge: "ส่งฟรีทางอีเมล",
-        title: "รับ Blueprint พร้อมภาพรวมระบบที่ทีมคุณนำไปคุยต่อได้ทันที",
-        bullets: [
-          "โครงสร้าง 3 ชั้น: Data, Intelligence และ AI Interface",
-          "ตัวอย่าง use case ที่เชื่อมกับข้อมูลธุรกิจจริง",
-          "เช็กลิสต์เพื่อประเมินความพร้อมก่อนลงมือ",
-        ],
-        reassurance: "ใช้ Business Email เพื่อให้ทีมเราส่งรายละเอียดกลับได้ถูกต้อง",
-      }
-    : {
-        badge: "Free email delivery",
-        title: "Get the blueprint your team can use to align architecture and next steps.",
-        bullets: [
-          "A clear 3-layer system map for your rollout",
-          "Real examples of AI connected to live business data",
-          "A readiness checklist to guide implementation",
-        ],
-        reassurance: "Use your business email so we can send the blueprint and follow-up details.",
-      };
+  const [expanded, setExpanded] = useState(!collapsible || variant !== "default");
+  const [showOptionalDetails, setShowOptionalDetails] = useState(!progressive);
+  const useProgressive = progressive && variant === "default";
+
+  function stripRequired(label: string) {
+    return label.replace(/\s*\*$/, "");
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -56,17 +84,45 @@ export function LeadForm({
 
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") ?? "").trim();
+    const firstName = String(form.get("firstName") ?? "").trim();
+    const lastName = String(form.get("lastName") ?? "").trim();
+    const company = String(form.get("company") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+    const companySize = String(form.get("companySize") ?? "").trim();
+    const industry = String(form.get("industry") ?? "").trim();
+    const role = String(form.get("role") ?? "").trim();
+    const consent = form.get("consent") === "on";
+
+    const isSimpleVariant = variant === "inline" || variant === "dark";
+    const payload = isSimpleVariant
+      ? {
+          name: email.split("@")[0],
+          email,
+          company: "",
+        }
+      : {
+          name: [firstName, lastName].filter(Boolean).join(" ").trim(),
+          email,
+          company,
+          firstName,
+          lastName,
+          phone,
+          companySize,
+          industry,
+          role,
+          consent,
+          source: "blueprint-hero-form",
+        };
 
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: email.split("@")[0], email, company: "" }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
 
-      // If API returns mock mode or success, redirect to thank you
       if (data.mock || res.ok) {
         fbqTrack("Lead", { content_name: "AI Transformation Blueprint" });
         router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
@@ -150,71 +206,358 @@ export function LeadForm({
     );
   }
 
-  // default — white card variant for above-the-fold
+  const labelCls = "mb-2 block text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500";
+  const inputCls =
+    "w-full rounded-2xl border border-slate-200/90 bg-slate-50/90 px-4 py-3.5 text-sm text-brand-title outline-none transition-colors placeholder:text-slate-400 focus:border-brand-navy/35 focus:bg-white";
+  const selectCls = `${inputCls} appearance-none pr-10`;
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-md overflow-hidden rounded-[28px] border border-white/70 bg-white p-6 shadow-[0_28px_90px_rgba(15,23,42,0.32)] md:p-7"
+      className="w-full max-w-xl overflow-hidden rounded-[30px] border border-white/10 bg-white shadow-[0_28px_90px_rgba(15,23,42,0.35)]"
     >
-      <div className="mb-5 rounded-[22px] bg-slate-950 px-5 py-5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
-        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1">
-          <Sparkles className="h-3.5 w-3.5 text-indigo-300" />
-          <span className="text-[11px] font-medium tracking-[0.18em] text-white/70 uppercase">
-            {formCopy.badge}
-          </span>
+      <div className="relative overflow-hidden bg-[linear-gradient(135deg,#0f1230_0%,#171b46_58%,#1e2b66_100%)] px-6 py-6 text-white md:px-7">
+        <div className="absolute inset-y-0 right-[-4rem] w-48 bg-[radial-gradient(circle_at_center,rgba(129,140,248,0.32),transparent_70%)] blur-2xl" />
+        <div className="relative">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/7 px-3 py-1.5">
+            <Sparkles className="h-3.5 w-3.5 text-indigo-300" />
+            <span className="text-[11px] font-medium tracking-[0.18em] text-white/72 uppercase">
+              {t.defaultBadge}
+            </span>
+          </div>
+          <h2 className="max-w-lg text-xl font-medium leading-tight text-white md:text-[1.55rem]">
+            {t.defaultTitle}
+          </h2>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/68 font-[family-name:var(--font-prompt)]">
+            {t.defaultIntro}
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2.5 text-xs text-white/78">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />
+              <span>{t.reassurance}</span>
+            </div>
+            <div className="inline-flex items-center rounded-full border border-white/10 bg-white/6 px-3 py-1.5">
+              {t.requiredHint}
+            </div>
+          </div>
         </div>
-        <h2 className="text-lg font-medium leading-snug text-white">
-          {formCopy.title}
-        </h2>
-        <ul className="mt-4 space-y-2.5">
-          {formCopy.bullets.map((bullet) => (
-            <li
-              key={bullet}
-              className="flex items-start gap-2.5 text-sm leading-relaxed text-white/70"
-            >
-              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-300" />
-              <span>{bullet}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
-      <div className="space-y-4">
-        <div className="space-y-1.5">
-          <label htmlFor={emailFieldId} className="text-sm font-medium text-brand-title">
-          {t.emailLabel}
-        </label>
-        <input
-          id={emailFieldId}
-          name="email"
-          type="email"
-          required
-          placeholder={t.emailPlaceholder}
-          autoComplete="email"
-          inputMode="email"
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? errorId : undefined}
-          className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-sm text-brand-title outline-none transition-colors placeholder:text-slate-400 focus:border-brand-navy/35 focus:bg-white"
-        />
-      </div>
+      {!expanded ? (
+        <div className="space-y-4 p-6 md:p-7">
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-navy px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-brand-navy/92"
+          >
+            {t.expandCta}
+          </button>
+          <div className="space-y-1 text-center">
+            <p className="text-sm text-slate-600">{t.footer}</p>
+            <p className="text-xs text-slate-500">{t.reassurance}</p>
+          </div>
+        </div>
+      ) : (
+      <div className="space-y-5 p-6 md:p-7">
+        {useProgressive && (
+          <div className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3">
+            <p className="text-sm leading-relaxed text-slate-600 font-[family-name:var(--font-prompt)]">
+              {t.progressiveHint}
+            </p>
+          </div>
+        )}
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label htmlFor={firstNameId} className={labelCls}>
+              {t.firstNameLabel}
+            </label>
+            <input
+              id={firstNameId}
+              name="firstName"
+              type="text"
+              required
+              autoComplete="given-name"
+              placeholder={t.firstNamePlaceholder}
+              className={inputCls}
+            />
+          </div>
+          {!useProgressive && (
+            <div>
+              <label htmlFor={lastNameId} className={labelCls}>
+                {t.lastNameLabel}
+              </label>
+              <input
+                id={lastNameId}
+                name="lastName"
+                type="text"
+                required
+                autoComplete="family-name"
+                placeholder={t.lastNamePlaceholder}
+                className={inputCls}
+              />
+            </div>
+          )}
+          <div className={useProgressive ? "" : ""}>
+            <label htmlFor={companyId} className={labelCls}>
+              {t.companyLabel}
+            </label>
+            <input
+              id={companyId}
+              name="company"
+              type="text"
+              required
+              autoComplete="organization"
+              placeholder={t.companyPlaceholder}
+              className={inputCls}
+            />
+          </div>
+          <div className={useProgressive ? "md:col-span-2" : ""}>
+            <label htmlFor={emailFieldId} className={labelCls}>
+              {t.emailLabel}
+            </label>
+            <input
+              id={emailFieldId}
+              name="email"
+              type="email"
+              required
+              placeholder={t.emailPlaceholder}
+              autoComplete="email"
+              inputMode="email"
+              aria-invalid={Boolean(error)}
+              aria-describedby={error ? errorId : undefined}
+              className={inputCls}
+            />
+          </div>
+
+          {!useProgressive && (
+            <>
+              <div>
+                <label htmlFor={phoneId} className={labelCls}>
+                  {t.phoneLabel}
+                </label>
+                <input
+                  id={phoneId}
+                  name="phone"
+                  type="tel"
+                  required
+                  autoComplete="tel"
+                  inputMode="tel"
+                  placeholder={t.phonePlaceholder}
+                  className={inputCls}
+                />
+              </div>
+              <div className="relative">
+                <label htmlFor={companySizeId} className={labelCls}>
+                  {t.companySizeLabel}
+                </label>
+                <select
+                  id={companySizeId}
+                  name="companySize"
+                  required
+                  defaultValue=""
+                  className={selectCls}
+                >
+                  <option value="" disabled>
+                    {t.companySizePlaceholder}
+                  </option>
+                  {t.companySizes.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+              </div>
+              <div className="relative">
+                <label htmlFor={industryId} className={labelCls}>
+                  {t.industryLabel}
+                </label>
+                <select
+                  id={industryId}
+                  name="industry"
+                  required
+                  defaultValue=""
+                  className={selectCls}
+                >
+                  <option value="" disabled>
+                    {t.industryPlaceholder}
+                  </option>
+                  {t.industries.map((industry) => (
+                    <option key={industry} value={industry}>
+                      {industry}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+              </div>
+              <div className="relative">
+                <label htmlFor={roleId} className={labelCls}>
+                  {t.roleLabel}
+                </label>
+                <select
+                  id={roleId}
+                  name="role"
+                  required
+                  defaultValue=""
+                  className={selectCls}
+                >
+                  <option value="" disabled>
+                    {t.rolePlaceholder}
+                  </option>
+                  {t.roles.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+              </div>
+            </>
+          )}
+        </div>
+
+        {useProgressive && (
+          <div className="space-y-4 rounded-[24px] border border-slate-200 bg-white p-4">
+            <button
+              type="button"
+              onClick={() => setShowOptionalDetails((current) => !current)}
+              className="inline-flex items-center gap-2 text-sm font-medium text-brand-navy transition-colors hover:text-brand-navy/80"
+            >
+              <span>{showOptionalDetails ? t.optionalDetailsHideCta : t.optionalDetailsCta}</span>
+              <span className="text-base leading-none">{showOptionalDetails ? "−" : "+"}</span>
+            </button>
+
+            {showOptionalDetails && (
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <label htmlFor={lastNameId} className={labelCls}>
+                    {stripRequired(t.lastNameLabel)}
+                  </label>
+                  <input
+                    id={lastNameId}
+                    name="lastName"
+                    type="text"
+                    autoComplete="family-name"
+                    placeholder={t.lastNamePlaceholder}
+                    className={inputCls}
+                  />
+                </div>
+                <div>
+                  <label htmlFor={phoneId} className={labelCls}>
+                    {stripRequired(t.phoneLabel)}
+                  </label>
+                  <input
+                    id={phoneId}
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    inputMode="tel"
+                    placeholder={t.phonePlaceholder}
+                    className={inputCls}
+                  />
+                </div>
+                <div className="relative">
+                  <label htmlFor={companySizeId} className={labelCls}>
+                    {stripRequired(t.companySizeLabel)}
+                  </label>
+                  <select
+                    id={companySizeId}
+                    name="companySize"
+                    defaultValue=""
+                    className={selectCls}
+                  >
+                    <option value="">{t.companySizePlaceholder}</option>
+                    {t.companySizes.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+                </div>
+                <div className="relative">
+                  <label htmlFor={industryId} className={labelCls}>
+                    {stripRequired(t.industryLabel)}
+                  </label>
+                  <select
+                    id={industryId}
+                    name="industry"
+                    defaultValue=""
+                    className={selectCls}
+                  >
+                    <option value="">{t.industryPlaceholder}</option>
+                    {t.industries.map((industry) => (
+                      <option key={industry} value={industry}>
+                        {industry}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+                </div>
+                <div className="relative md:col-span-2">
+                  <label htmlFor={roleId} className={labelCls}>
+                    {stripRequired(t.roleLabel)}
+                  </label>
+                  <select
+                    id={roleId}
+                    name="role"
+                    defaultValue=""
+                    className={selectCls}
+                  >
+                    <option value="">{t.rolePlaceholder}</option>
+                    {t.roles.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div className="rounded-[24px] border border-slate-200 bg-slate-50/75 p-4">
+          <label htmlFor={consentId} className="flex items-start gap-3 cursor-pointer">
+            <input
+              id={consentId}
+              name="consent"
+              type="checkbox"
+              required
+              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-brand-navy focus:ring-brand-navy"
+            />
+            <span className="space-y-1">
+              <span className="block text-sm font-medium text-brand-title">{t.consentLabel}</span>
+              <span className="block text-xs leading-relaxed text-slate-500 font-[family-name:var(--font-prompt)]">
+                {t.consentHint} {t.privacyText}
+              </span>
+            </span>
+          </label>
+        </div>
+
         {error && (
-          <p id={errorId} className="text-red-500 text-xs" aria-live="polite">
+          <p id={errorId} className="text-xs text-red-500" aria-live="polite">
             {error}
           </p>
         )}
+
         <button
           type="submit"
           disabled={loading}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-navy px-6 py-3.5 text-sm font-medium text-white transition-colors hover:bg-brand-navy/90 disabled:opacity-60"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-brand-navy px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-brand-navy/92 disabled:opacity-60"
         >
           {loading && <LoaderCircle className="h-4 w-4 animate-spin" />}
           {loading ? t.submitting : t.submit}
         </button>
+
         <div className="space-y-1 text-center">
           <p className="text-sm text-slate-600">{t.footer}</p>
-          <p className="text-xs text-slate-500">{formCopy.reassurance}</p>
+          <p className="text-xs text-slate-500">{t.reassurance}</p>
         </div>
       </div>
+      )}
     </form>
   );
 }

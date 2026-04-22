@@ -5,7 +5,19 @@ import { fireServerEvent } from "@/lib/fb-capi";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, company } = body;
+    const {
+      name,
+      email,
+      company,
+      firstName,
+      lastName,
+      phone,
+      companySize,
+      industry,
+      role,
+      consent,
+      source,
+    } = body;
 
     if (!email) {
       return NextResponse.json(
@@ -34,7 +46,15 @@ export async function POST(request: NextRequest) {
 
     await createOrUpdateSubscriber(email, name || email.split("@")[0], [listId], {
       company: company || "",
-      source: "blueprint",
+      firstName: firstName || "",
+      lastName: lastName || "",
+      phone: phone || "",
+      companySize: companySize || "",
+      industry: industry || "",
+      role: role || "",
+      consent: consent ? "true" : "false",
+      source: source || "blueprint",
+      formType: "blueprint-lead",
     });
 
     fireServerEvent({
