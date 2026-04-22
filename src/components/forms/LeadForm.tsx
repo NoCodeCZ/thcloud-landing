@@ -102,16 +102,21 @@ export function LeadForm({
         };
 
     try {
+      const eventId =
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
+
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, eventId }),
       });
 
       const data = await res.json();
 
       if (data.mock || res.ok) {
-        fbqTrack("Lead", { content_name: "AI Transformation Blueprint" });
+        fbqTrack("Lead", { content_name: "AI Transformation Blueprint" }, eventId);
         router.push(`/${locale}/blueprint/read?email=${encodeURIComponent(email)}`);
         return;
       }

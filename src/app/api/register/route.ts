@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createOrUpdateSubscriber } from "@/lib/listmonk";
-import { fireServerEvent } from "@/lib/fb-capi";
+import { fireServerEvent, extractFbContext } from "@/lib/fb-capi";
 import { captureLead } from "@/lib/lead-crm";
 
 export const runtime = "nodejs";
@@ -8,7 +7,7 @@ export const runtime = "nodejs";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, email, company, industry, revenue, challenge } = body;
+    const { name, email, company } = body;
 
     if (!name || !email || !company) {
       return NextResponse.json(
@@ -30,23 +29,13 @@ export async function POST(request: NextRequest) {
       payload: body,
     });
 
-    const listId = parseInt(
-      process.env.LISTMONK_WEBINAR_LIST_ID || "2",
-      10
-    );
-
-    await createOrUpdateSubscriber(email, name, [listId], {
-      company,
-      industry: industry || "",
-      revenue: revenue || "",
-      challenge: challenge || "",
-      source: "webinar",
-    });
-
     fireServerEvent({
       eventName: "CompleteRegistration",
       email,
       customData: { content_name: "Webinar Registration" },
+      eventId: body.eventId,
+      sourceUrl: request.headers.get("referer") || undefined,
+      ...extractFbContext(request),
     }).catch(() => {});
 
     return NextResponse.json({ success: true });

@@ -162,14 +162,18 @@ export function DemoForm({
     setError("");
 
     try {
+      const eventId =
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
       const res = await fetch("/api/demo-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, eventId }),
       });
       const data = await res.json();
       if (data.mock || res.ok) {
-        fbqTrack("SubmitApplication", { content_name: "Demo Request" });
+        fbqTrack("SubmitApplication", { content_name: "Demo Request" }, eventId);
         if (onSubmitted) {
           onSubmitted();
         } else {

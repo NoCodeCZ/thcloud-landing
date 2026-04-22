@@ -143,8 +143,26 @@ export default async function Home({
                 </div>
               </div>
             </div>
-            <div className="w-full max-w-xl shrink-0 scroll-mt-24" id="lead-form-hero">
-              <LeadForm translations={t.form} locale={locale} collapsible />
+            <div className="w-full max-w-md shrink-0" id="lead-form-hero">
+              <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-7 backdrop-blur-sm">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <a
+                    href="#lead-form-final"
+                    className="inline-flex flex-1 items-center justify-center rounded-2xl bg-white px-6 py-4 text-sm font-medium text-brand-navy transition-transform hover:scale-[1.02]"
+                  >
+                    {t.ctaButton}
+                  </a>
+                  <a
+                    href={`/${locale}/demo`}
+                    className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-indigo-100/80 transition-colors hover:text-indigo-100"
+                  >
+                    {t.finalCta.bookCall} &rarr;
+                  </a>
+                </div>
+                <p className="mt-4 text-xs leading-relaxed text-white/55 font-[family-name:var(--font-prompt)]">
+                  {t.form.footer}
+                </p>
+              </div>
             </div>
           </div>
         </section>
