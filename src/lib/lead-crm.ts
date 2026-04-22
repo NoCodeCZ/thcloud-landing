@@ -55,7 +55,7 @@ type UpdateLeadInput = {
   notes?: string;
 };
 
-const DATA_DIR = path.join(process.cwd(), ".data");
+const DATA_DIR = path.resolve(process.cwd(), process.env.LEAD_CRM_DATA_DIR || ".data");
 const LEADS_FILE = path.join(DATA_DIR, "leads.json");
 
 const EMPTY_STORE: LeadStore = { leads: [] };
@@ -183,6 +183,27 @@ async function writeStore(store: LeadStore) {
   await rename(tempFile, LEADS_FILE);
 }
 
+async function deliverLeadNotification(lead: LeadRecord, submission: LeadSubmission) {
+  try {
+    const result = await notifyLarkLead(lead, submission);
+
+    if (result.skipped) {
+      console.warn("Lark lead notification skipped: LARK_LEAD_WEBHOOK_URL is not configured", {
+        leadId: lead.id,
+        formType: submission.formType,
+      });
+      return;
+    }
+
+    console.info("Lark lead notification delivered", {
+      leadId: lead.id,
+      formType: submission.formType,
+    });
+  } catch (error) {
+    console.error("Lark lead notification error:", error);
+  }
+}
+
 export async function listLeads() {
   const store = await readStore();
   return [...store.leads].sort(
@@ -232,9 +253,13 @@ export async function captureLead(input: CaptureLeadInput) {
 
     store.leads = store.leads.map((lead) => (lead.id === existingLead.id ? nextLead : lead));
     await writeStore(store);
-    await notifyLarkLead(nextLead, submission).catch((error) => {
-      console.error("Lark lead notification error:", error);
+    console.info("Lead captured", {
+      leadId: nextLead.id,
+      email: nextLead.email,
+      formType: input.formType,
+      leadsFile: LEADS_FILE,
     });
+    await deliverLeadNotification(nextLead, submission);
     return nextLead;
   }
 
@@ -262,9 +287,13 @@ export async function captureLead(input: CaptureLeadInput) {
 
   store.leads = [lead, ...store.leads];
   await writeStore(store);
-  await notifyLarkLead(lead, submission).catch((error) => {
-    console.error("Lark lead notification error:", error);
+  console.info("Lead captured", {
+    leadId: lead.id,
+    email: lead.email,
+    formType: input.formType,
+    leadsFile: LEADS_FILE,
   });
+  await deliverLeadNotification(lead, submission);
   return lead;
 }
 

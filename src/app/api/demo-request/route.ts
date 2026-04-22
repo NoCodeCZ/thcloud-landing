@@ -3,6 +3,8 @@ import { createOrUpdateSubscriber } from "@/lib/listmonk";
 import { fireServerEvent } from "@/lib/fb-capi";
 import { captureLead } from "@/lib/lead-crm";
 
+export const runtime = "nodejs";
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

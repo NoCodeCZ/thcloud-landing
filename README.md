@@ -28,6 +28,10 @@ Lead submissions from `/api/subscribe`, `/api/demo-request`, and `/api/register`
 
 Set `LARK_LEAD_WEBHOOK_URL` in your local `.env.local` and in your deployment environment before pushing live. The repository keeps only the placeholder in `.env.example` so the webhook secret is not committed.
 
+In container deployments, set `LEAD_CRM_DATA_DIR` to a persistent mounted directory if you need the built-in CRM board to survive restarts and redeploys. If it is not set, the app writes to `./.data` under the current working directory.
+
+The admin board should also receive explicit production credentials via `ADMIN_USERNAME`, `ADMIN_PASSWORD`, and `ADMIN_SESSION_SECRET` instead of relying on the development defaults.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
