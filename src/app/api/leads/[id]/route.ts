@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAdminRequestAuthenticated } from "@/lib/admin-auth";
 import { isValidLeadStage, updateLead } from "@/lib/lead-crm";
 
 export const runtime = "nodejs";
@@ -8,6 +9,10 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  if (!isAdminRequestAuthenticated(request)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   const { id } = await params;
   const body = (await request.json()) as {
     stage?: string;

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { LeadRecord, LeadStage } from "@/lib/lead-crm";
 
 type Stage = {
@@ -48,6 +49,7 @@ function getLeadSummary(lead: LeadRecord) {
 }
 
 export function LeadKanbanBoard({ locale }: { locale: string }) {
+  const router = useRouter();
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [stages, setStages] = useState<Stage[]>([]);
   const [draftNotes, setDraftNotes] = useState<Record<string, string>>({});
@@ -56,37 +58,58 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
   const [savingLeadId, setSavingLeadId] = useState<string | null>(null);
   const [error, setError] = useState("");
 
-  async function loadLeads() {
-    setError("");
-
-    try {
-      const response = await fetch("/api/leads", { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error("Failed to load leads");
-      }
-
-      const data = (await response.json()) as LeadApiResponse;
-      setLeads(data.leads);
-      setStages(data.stages);
-      setDraftNotes((current) => {
-        const next = { ...current };
-        for (const lead of data.leads) {
-          if (!(lead.id in next)) {
-            next[lead.id] = lead.notes;
-          }
-        }
-        return next;
-      });
-    } catch (loadError) {
-      setError(loadError instanceof Error ? loadError.message : "Failed to load leads");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
+    let active = true;
+
+    async function loadLeads() {
+      setError("");
+
+      try {
+        const response = await fetch("/api/leads", { cache: "no-store" });
+        if (response.status === 401) {
+          router.replace(`/${locale}/crm/login`);
+          return;
+        }
+        if (!response.ok) {
+          throw new Error("Failed to load leads");
+        }
+
+        const data = (await response.json()) as LeadApiResponse;
+
+        if (!active) {
+          return;
+        }
+
+        setLeads(data.leads);
+        setStages(data.stages);
+        setDraftNotes((current) => {
+          const next = { ...current };
+          for (const lead of data.leads) {
+            if (!(lead.id in next)) {
+              next[lead.id] = lead.notes;
+            }
+          }
+          return next;
+        });
+      } catch (loadError) {
+        if (!active) {
+          return;
+        }
+
+        setError(loadError instanceof Error ? loadError.message : "Failed to load leads");
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    }
+
     void loadLeads();
-  }, []);
+
+    return () => {
+      active = false;
+    };
+  }, [locale, router]);
 
   async function saveLead(leadId: string, updates: { stage?: LeadStage; notes?: string }) {
     setSavingLeadId(leadId);
@@ -98,6 +121,11 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updates),
       });
+
+      if (response.status === 401) {
+        router.replace(`/${locale}/crm/login`);
+        return;
+      }
 
       if (!response.ok) {
         const data = (await response.json()) as { error?: string };
@@ -133,6 +161,12 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
     void saveLead(draggingLeadId, { stage });
   }
 
+  async function handleLogout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    router.replace(`/${locale}/crm/login`);
+    router.refresh();
+  }
+
   return (
     <section className="mx-auto w-full max-w-[1600px] px-6 pb-12">
       <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur">
@@ -148,6 +182,13 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
               Every submission from the blueprint, webinar, and demo forms is stored here automatically.
               Drag a card between columns or update it from the dropdown on the card.
             </p>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="mt-4 inline-flex items-center justify-center rounded-2xl border border-white/12 bg-white/8 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-white/12"
+            >
+              Log out
+            </button>
           </div>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
             {stages.map((stage) => {
