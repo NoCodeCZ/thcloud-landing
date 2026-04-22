@@ -4,12 +4,20 @@ import { locales, defaultLocale } from "./i18n/config";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  const localeAssetMatch = pathname.match(/^\/(th|en)\/blueprint-playbook(\/.*)?$/);
+  if (localeAssetMatch) {
+    const newUrl = request.nextUrl.clone();
+    newUrl.pathname = `/blueprint-playbook${localeAssetMatch[2] || ""}`;
+    return NextResponse.rewrite(newUrl);
+  }
+
   // Skip static files, API routes, _next, and the English-only ebook
   if (
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/blueprint/read") ||
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff2?|ttf|css|js|map)$/)
+    pathname.startsWith("/blueprint-playbook") ||
+    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff2?|ttf|css|js|map|html)$/)
   ) {
     return NextResponse.next();
   }

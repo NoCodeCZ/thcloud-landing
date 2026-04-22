@@ -125,14 +125,14 @@ export function LeadForm({
 
       if (data.mock || res.ok) {
         fbqTrack("Lead", { content_name: "AI Transformation Blueprint" });
-        router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
+        router.push(`/${locale}/blueprint/read?email=${encodeURIComponent(email)}`);
         return;
       }
 
       throw new Error(data.error || "Something went wrong");
     } catch (err) {
       if (err instanceof Error && err.message.includes("mock")) {
-        router.push(`/${locale}/thank-you?email=${encodeURIComponent(email)}`);
+        router.push(`/${locale}/blueprint/read?email=${encodeURIComponent(email)}`);
         return;
       }
       setError(err instanceof Error ? err.message : "Something went wrong");

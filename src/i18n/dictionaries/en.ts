@@ -25,13 +25,13 @@ const en = {
     form: {
       emailLabel: "Contact Email",
       emailPlaceholder: "name@company.com",
-      submit: "Send Me the Blueprint",
-      submitting: "Sending...",
-      footer: "Free. No spam. Unsubscribe anytime.",
-      defaultBadge: "Blueprint delivery",
-      defaultTitle: "Tell us a bit about your business and we will send the blueprint plus the most relevant next steps.",
+      submit: "Read the Playbook",
+      submitting: "Opening...",
+      footer: "You’ll get immediate access on the next page. No spam. Unsubscribe anytime.",
+      defaultBadge: "Playbook access",
+      defaultTitle: "Tell us a bit about your business and unlock the playbook plus the next steps that fit your context.",
       defaultIntro:
-        "This helps us understand your operating context so the blueprint and our follow-up stay relevant to your business, team size, and implementation priorities.",
+        "This helps us understand your operating context before you read the playbook and before we follow up about implementation priorities.",
       requiredHint: "* Required fields",
       firstNameLabel: "First Name *",
       firstNamePlaceholder: "Your first name",
@@ -82,8 +82,8 @@ const en = {
       consentHint:
         "By submitting this form, you allow THCloud.AI to send the requested blueprint and follow up about relevant solutions.",
       privacyText: "Contact details are used only for this conversation.",
-      reassurance: "Use your business email so our team can send the blueprint and relevant follow-up.",
-      expandCta: "Open the lead form",
+      reassurance: "Use your business email so our team can tailor the follow-up to your business context.",
+      expandCta: "Unlock the playbook",
       progressiveHint: "Start with the basics. Add more business details only if you want a more tailored follow-up.",
       optionalDetailsCta: "Add more details",
       optionalDetailsHideCta: "Keep it simple",
@@ -256,6 +256,11 @@ const en = {
       title: "Ready to Start?",
       body: "The first step is a Demo Call. We show you the system running live, map your data landscape, and scope the build. No commitment required.",
       bookCall: "Book a Demo Call",
+    },
+    sectionCta: {
+      title: "Want the blueprint tailored to your business context?",
+      body: "Share a few details and we will send the blueprint with follow-up that fits your team, systems, and priorities.",
+      button: "Go to the Form",
     },
     sectionLabels: {
       targetAudience: "Target audience",
