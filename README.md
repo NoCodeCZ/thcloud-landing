@@ -2,6 +2,12 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Copy the tracked example env file and fill in the real values before running or deploying:
+
+```bash
+cp .env.example .env.local
+```
+
 First, run the development server:
 
 ```bash
@@ -15,6 +21,12 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Lead Notifications
+
+Lead submissions from `/api/subscribe`, `/api/demo-request`, and `/api/register` are stored in `.data/leads.json` and can also be pushed to a Lark group via a custom bot webhook.
+
+Set `LARK_LEAD_WEBHOOK_URL` in your local `.env.local` and in your deployment environment before pushing live. The repository keeps only the placeholder in `.env.example` so the webhook secret is not committed.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

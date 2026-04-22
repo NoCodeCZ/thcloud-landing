@@ -1,6 +1,7 @@
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { notifyLarkLead } from "@/lib/lark";
 
 export const LEAD_STAGES = [
   { id: "new", label: "New" },
@@ -214,6 +215,9 @@ export async function captureLead(input: CaptureLeadInput) {
 
     store.leads = store.leads.map((lead) => (lead.id === existingLead.id ? nextLead : lead));
     await writeStore(store);
+    await notifyLarkLead(nextLead, submission).catch((error) => {
+      console.error("Lark lead notification error:", error);
+    });
     return nextLead;
   }
 
@@ -241,6 +245,9 @@ export async function captureLead(input: CaptureLeadInput) {
 
   store.leads = [lead, ...store.leads];
   await writeStore(store);
+  await notifyLarkLead(lead, submission).catch((error) => {
+    console.error("Lark lead notification error:", error);
+  });
   return lead;
 }
 
