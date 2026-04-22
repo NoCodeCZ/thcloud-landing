@@ -1,4 +1,11 @@
-const logos = [
+type Logo = {
+  name: string;
+  src?: string;
+  imageClass?: string;
+  label?: string;
+};
+
+const logos: Logo[] = [
   {
     name: "OpenWebUI",
     src: "/trust-logos/openwebui.ico",
@@ -28,7 +35,7 @@ const logos = [
 export function TrustLogos({ label }: { label?: string }) {
   return (
     <section className="max-w-6xl mx-auto w-full text-center">
-      <p className="text-xs uppercase tracking-[0.24em] text-white/30 mb-8 font-medium animate-in fade-in slide-in-from-bottom-2 duration-700">
+      <p className="mb-8 text-sm uppercase tracking-[0.24em] text-white/55 font-medium animate-in fade-in slide-in-from-bottom-2 duration-700">
         {label ?? "Powered by"}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-x-4 gap-y-6 md:gap-x-5">
@@ -53,7 +60,7 @@ export function TrustLogos({ label }: { label?: string }) {
                   } transition-transform duration-300 ease-out group-hover:scale-105`}
                 />
               </div>
-              <span className="text-white/32 text-[10px] md:text-xs font-medium transition-colors duration-300 group-hover:text-white/55">
+              <span className="text-white/65 text-xs md:text-sm font-medium transition-colors duration-300 group-hover:text-white">
                 {logo.name}
               </span>
             </div>
@@ -67,12 +74,12 @@ export function TrustLogos({ label }: { label?: string }) {
               }}
             >
               <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl border border-white/10 bg-gradient-to-b from-white/95 to-white/88 shadow-[0_16px_36px_rgba(15,23,42,0.26)] flex items-center justify-center transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_22px_42px_rgba(15,23,42,0.34)]">
-                <span className="text-[9px] md:text-[10px] font-mono font-medium text-white/30">
-                  {logo.label!.slice(0, 2).toUpperCase()}
+                <span className="text-[10px] md:text-[11px] font-mono font-medium text-white/45">
+                  {(logo.label ?? logo.name).slice(0, 2).toUpperCase()}
                 </span>
               </div>
-              <span className="text-white/32 text-[10px] md:text-xs font-medium transition-colors duration-300 group-hover:text-white/55">
-                {logo.label}
+              <span className="text-white/65 text-xs md:text-sm font-medium transition-colors duration-300 group-hover:text-white">
+                {logo.label ?? logo.name}
               </span>
             </div>
           )

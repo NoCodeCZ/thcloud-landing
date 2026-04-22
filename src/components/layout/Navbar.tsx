@@ -87,7 +87,7 @@ export function Navbar({
               <button
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
-                className="px-3 py-1.5 text-sm text-white/50 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className="px-3 py-1.5 text-sm text-white/72 hover:text-white transition-colors rounded-lg hover:bg-white/5"
               >
                 {item.label}
               </button>
@@ -131,7 +131,7 @@ export function Navbar({
                 <button
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
-                  className="block w-full text-left px-3 py-2.5 text-sm text-white/60 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  className="block w-full text-left px-3 py-2.5 text-sm text-white/80 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 >
                   {item.label}
                 </button>

@@ -2,23 +2,66 @@
 
 import { useState, useEffect } from "react";
 
+const DEFAULT_HIDDEN_IDS = ["lead-form-hero", "lead-form-inline", "lead-form-final"];
+
 export function StickyCTA({
   label,
   onClick,
+  hiddenWhenVisibleIds = DEFAULT_HIDDEN_IDS,
 }: {
   label: string;
   onClick?: () => void;
+  hiddenWhenVisibleIds?: string[];
 }) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      // Show after scrolling past 600px (past the hero)
-      setVisible(window.scrollY > 600);
+    const visibleForms = new Set<string>();
+    let frame = 0;
+
+    const syncVisibility = () => {
+      setVisible(window.scrollY > 600 && visibleForms.size === 0);
     };
+
+    const handleScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = window.requestAnimationFrame(syncVisibility);
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = (entry.target as HTMLElement).id;
+          if (!id) {
+            return;
+          }
+          if (entry.isIntersecting) {
+            visibleForms.add(id);
+          } else {
+            visibleForms.delete(id);
+          }
+        });
+        syncVisibility();
+      },
+      { threshold: 0.3 }
+    );
+
+    hiddenWhenVisibleIds.forEach((id) => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    syncVisibility();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [hiddenWhenVisibleIds]);
 
   function scrollToForm() {
     if (onClick) {
@@ -42,10 +85,10 @@ export function StickyCTA({
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >
-      <div className="bg-brand-dark/95 backdrop-blur-md border-t border-white/10 px-4 py-3">
+      <div className="border-t border-white/10 bg-brand-dark/95 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur-md">
         <button
           onClick={scrollToForm}
-          className="w-full py-3 rounded-xl bg-white text-brand-navy font-medium text-sm hover:bg-white/90 transition-colors"
+          className="w-full rounded-2xl bg-white py-3.5 text-sm font-medium text-brand-navy shadow-[0_16px_40px_rgba(15,23,42,0.25)] transition-colors hover:bg-white/90"
         >
           {label}
         </button>
