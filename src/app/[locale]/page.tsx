@@ -96,8 +96,8 @@ export default async function Home({
           <div className="absolute top-[-20%] left-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-indigo-600/8 blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[-10%] right-[-5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-purple-500/5 blur-[100px] pointer-events-none" />
 
-          <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
-            <div className="flex-1 text-center lg:text-left">
+          <div className="relative max-w-5xl mx-auto flex flex-col gap-10 items-center text-center">
+            <div className="w-full">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/15 mb-6">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
                 <span className="text-sm font-medium text-indigo-200 tracking-wide">
@@ -107,11 +107,11 @@ export default async function Home({
               <h1 className="text-4xl md:text-6xl font-medium leading-[1.1] mb-6 bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
                 {t.hero.headline}
               </h1>
-              <p className="text-base md:text-xl text-white/72 leading-relaxed font-[family-name:var(--font-prompt)] max-w-xl mx-auto lg:mx-0 mb-8">
+              <p className="text-base md:text-xl text-white/72 leading-relaxed font-[family-name:var(--font-prompt)] max-w-2xl mx-auto mb-10">
                 {t.hero.subhead}
               </p>
               {/* Hero visual */}
-              <div className="relative max-w-2xl mx-auto lg:mx-0">
+              <div className="relative max-w-3xl mx-auto">
                 <div className="absolute -inset-x-10 -inset-y-8 rounded-[40px] bg-gradient-to-r from-indigo-500/20 via-sky-400/10 to-cyan-400/10 blur-3xl pointer-events-none" />
                 <div className="absolute inset-x-4 inset-y-6 rounded-[34px] bg-gradient-to-br from-white/8 via-indigo-400/8 to-transparent blur-2xl pointer-events-none" />
 
@@ -143,7 +143,8 @@ export default async function Home({
                 </div>
               </div>
             </div>
-            <div className="w-full max-w-md shrink-0" id="lead-form-hero">
+
+            <div className="w-full max-w-xl" id="lead-form-hero">
               <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-7 backdrop-blur-sm">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                   <a
