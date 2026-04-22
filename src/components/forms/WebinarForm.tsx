@@ -97,6 +97,10 @@ export function WebinarForm({
     const challenge = form.get("challenge") as string;
 
     try {
+      const eventId =
+        typeof crypto !== "undefined" && typeof crypto.randomUUID === "function"
+          ? crypto.randomUUID()
+          : `evt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,6 +111,7 @@ export function WebinarForm({
           industry,
           revenue,
           challenge,
+          eventId,
         }),
       });
 
@@ -115,7 +120,7 @@ export function WebinarForm({
         throw new Error(data.error || "Something went wrong");
       }
 
-      fbqTrack("CompleteRegistration", { content_name: "Webinar Registration" });
+      fbqTrack("CompleteRegistration", { content_name: "Webinar Registration" }, eventId);
       setSubmittedEmail(email);
       setSubmitted(true);
     } catch (err) {

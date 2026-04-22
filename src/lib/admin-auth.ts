@@ -6,16 +6,26 @@ export const ADMIN_AUTH_COOKIE = "thcloud_admin_session";
 
 const SESSION_TTL_MS = 1000 * 60 * 60 * 24 * 7;
 
+function requireEnv(name: string, minLength = 1) {
+  const value = process.env[name];
+  if (!value || value.length < minLength) {
+    throw new Error(
+      `${name} must be set${minLength > 1 ? ` (min length ${minLength})` : ""}`
+    );
+  }
+  return value;
+}
+
 function getAdminUsername() {
-  return process.env.ADMIN_USERNAME || "admin";
+  return requireEnv("ADMIN_USERNAME");
 }
 
 function getAdminPassword() {
-  return process.env.ADMIN_PASSWORD || "1234";
+  return requireEnv("ADMIN_PASSWORD", 8);
 }
 
 function getSessionSecret() {
-  return process.env.ADMIN_SESSION_SECRET || "thcloud-admin-session-secret";
+  return requireEnv("ADMIN_SESSION_SECRET", 32);
 }
 
 function sign(value: string) {
@@ -47,7 +57,7 @@ export function validateAdminCredentials(username: string, password: string) {
 export function createAdminSessionToken(username: string) {
   const expiresAt = Date.now() + SESSION_TTL_MS;
   const payload = `${username}:${expiresAt}`;
-  const signature = sign(`${payload}:${getAdminPassword()}`);
+  const signature = sign(payload);
   return `${payload}:${signature}`;
 }
 
@@ -63,7 +73,7 @@ export function verifyAdminSessionToken(token: string) {
     return false;
   }
 
-  const expectedSignature = sign(`${username}:${expiresAtRaw}:${getAdminPassword()}`);
+  const expectedSignature = sign(`${username}:${expiresAtRaw}`);
   return username === getAdminUsername() && safeEqual(signature, expectedSignature);
 }
 

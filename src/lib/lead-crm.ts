@@ -183,6 +183,15 @@ async function writeStore(store: LeadStore) {
   await rename(tempFile, LEADS_FILE);
 }
 
+let leadLockChain: Promise<unknown> = Promise.resolve();
+function withLeadLock<T>(fn: () => Promise<T>): Promise<T> {
+  const next = leadLockChain.then(fn, fn);
+  leadLockChain = next.catch(() => {});
+  return next as Promise<T>;
+}
+
+const MAX_NOTES_LENGTH = 5000;
+
 async function deliverLeadNotification(lead: LeadRecord, submission: LeadSubmission) {
   try {
     const result = await notifyLarkLead(lead, submission);
@@ -212,9 +221,13 @@ export async function listLeads() {
 }
 
 export async function captureLead(input: CaptureLeadInput) {
+  return withLeadLock(() => captureLeadImpl(input));
+}
+
+async function captureLeadImpl(input: CaptureLeadInput) {
   const store = await readStore();
   const fields = compactFields(input.payload);
-  const email = fields.email.toLowerCase();
+  const email = (fields.email || "").toLowerCase();
 
   if (!email) {
     throw new Error("Lead email is required");
@@ -298,6 +311,10 @@ export async function captureLead(input: CaptureLeadInput) {
 }
 
 export async function updateLead(id: string, updates: UpdateLeadInput) {
+  return withLeadLock(() => updateLeadImpl(id, updates));
+}
+
+async function updateLeadImpl(id: string, updates: UpdateLeadInput) {
   const store = await readStore();
   const lead = store.leads.find((entry) => entry.id === id);
 
@@ -309,10 +326,13 @@ export async function updateLead(id: string, updates: UpdateLeadInput) {
     throw new Error("Invalid lead stage");
   }
 
+  const cappedNotes =
+    updates.notes !== undefined ? updates.notes.slice(0, MAX_NOTES_LENGTH) : lead.notes;
+
   const nextLead: LeadRecord = {
     ...lead,
     stage: updates.stage ?? lead.stage,
-    notes: updates.notes ?? lead.notes,
+    notes: cappedNotes,
     updatedAt: new Date().toISOString(),
   };
 
