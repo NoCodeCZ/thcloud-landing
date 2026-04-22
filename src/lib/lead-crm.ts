@@ -4,12 +4,8 @@ import { randomUUID } from "node:crypto";
 import { notifyLarkLead } from "@/lib/lark";
 
 export const LEAD_STAGES = [
-  { id: "new", label: "New" },
-  { id: "contacted", label: "Contacted" },
-  { id: "qualified", label: "Qualified" },
-  { id: "proposal", label: "Proposal" },
-  { id: "won", label: "Won" },
-  { id: "lost", label: "Lost" },
+  { id: "lead", label: "Lead" },
+  { id: "moved_to_lark", label: "Moved to Lark" },
 ] as const;
 
 export type LeadStage = (typeof LEAD_STAGES)[number]["id"];
@@ -64,8 +60,29 @@ const LEADS_FILE = path.join(DATA_DIR, "leads.json");
 
 const EMPTY_STORE: LeadStore = { leads: [] };
 
+const LEGACY_LARK_STAGE_IDS = new Set(["contacted", "qualified", "proposal", "won", "lost"]);
+
 function isLeadStage(value: string): value is LeadStage {
   return LEAD_STAGES.some((stage) => stage.id === value);
+}
+
+function normalizeLeadStage(value: string | undefined): LeadStage {
+  if (value === "lead" || value === "new") {
+    return "lead";
+  }
+
+  if (value === "moved_to_lark" || (value && LEGACY_LARK_STAGE_IDS.has(value))) {
+    return "moved_to_lark";
+  }
+
+  return "lead";
+}
+
+function normalizeLeadRecord(lead: LeadRecord): LeadRecord {
+  return {
+    ...lead,
+    stage: normalizeLeadStage(lead.stage),
+  };
 }
 
 function toText(value: unknown): string {
@@ -148,7 +165,7 @@ async function readStore(): Promise<LeadStore> {
     const raw = await readFile(LEADS_FILE, "utf8");
     const parsed = JSON.parse(raw) as LeadStore;
     return {
-      leads: Array.isArray(parsed.leads) ? parsed.leads : [],
+      leads: Array.isArray(parsed.leads) ? parsed.leads.map((lead) => normalizeLeadRecord(lead)) : [],
     };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
@@ -230,7 +247,7 @@ export async function captureLead(input: CaptureLeadInput) {
     industry: fields.industry || "",
     role: fields.role || "",
     companySize: fields.companySize || fields.revenue || "",
-    stage: "new",
+    stage: "lead",
     notes: "",
     createdAt: submittedAt,
     updatedAt: submittedAt,

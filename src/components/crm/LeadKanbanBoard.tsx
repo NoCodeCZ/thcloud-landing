@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { LeadRecord, LeadStage } from "@/lib/lead-crm";
 
@@ -15,12 +16,8 @@ type LeadApiResponse = {
 };
 
 const stageTheme: Record<LeadStage, string> = {
-  new: "border-sky-200 bg-sky-50 text-sky-700",
-  contacted: "border-amber-200 bg-amber-50 text-amber-700",
-  qualified: "border-violet-200 bg-violet-50 text-violet-700",
-  proposal: "border-indigo-200 bg-indigo-50 text-indigo-700",
-  won: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  lost: "border-rose-200 bg-rose-50 text-rose-700",
+  lead: "border-sky-200 bg-sky-50 text-sky-700",
+  moved_to_lark: "border-emerald-200 bg-emerald-50 text-emerald-700",
 };
 
 function formatDate(value: string, locale: string) {
@@ -48,11 +45,20 @@ function getLeadSummary(lead: LeadRecord) {
   );
 }
 
+function truncateText(value: string, maxLength: number) {
+  if (value.length <= maxLength) {
+    return value;
+  }
+
+  return `${value.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
 export function LeadKanbanBoard({ locale }: { locale: string }) {
   const router = useRouter();
   const [leads, setLeads] = useState<LeadRecord[]>([]);
   const [stages, setStages] = useState<Stage[]>([]);
   const [draftNotes, setDraftNotes] = useState<Record<string, string>>({});
+  const [expandedLeadIds, setExpandedLeadIds] = useState<Record<string, boolean>>({});
   const [draggingLeadId, setDraggingLeadId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [savingLeadId, setSavingLeadId] = useState<string | null>(null);
@@ -167,6 +173,13 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
     router.refresh();
   }
 
+  function toggleLeadExpanded(leadId: string) {
+    setExpandedLeadIds((current) => ({
+      ...current,
+      [leadId]: !current[leadId],
+    }));
+  }
+
   return (
     <section className="mx-auto w-full max-w-[1600px] px-6 pb-12">
       <div className="rounded-[32px] border border-white/10 bg-white/6 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.18)] backdrop-blur">
@@ -180,7 +193,8 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
             </h1>
             <p className="max-w-3xl text-sm leading-relaxed text-white/68">
               Every submission from the blueprint, webinar, and demo forms is stored here automatically.
-              Drag a card between columns or update it from the dropdown on the card.
+              Keep leads in the board until they are handed off, then move them to Lark. Cards stay compact
+              and expand only when you need notes or the full submission context.
             </p>
             <button
               type="button"
@@ -190,7 +204,7 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
               Log out
             </button>
           </div>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3">
             {stages.map((stage) => {
               const count = leads.filter((lead) => lead.stage === stage.id).length;
               return (
@@ -215,7 +229,7 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
         {loading ? (
           <div className="py-20 text-center text-sm text-white/60">Loading leads...</div>
         ) : (
-          <div className="mt-6 grid gap-4 overflow-x-auto xl:grid-cols-6">
+          <div className="mt-6 grid gap-4 overflow-x-auto lg:grid-cols-2">
             {stages.map((stage) => {
               const stageLeads = leads.filter((lead) => lead.stage === stage.id);
 
@@ -224,7 +238,7 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
                   key={stage.id}
                   onDragOver={(event) => event.preventDefault()}
                   onDrop={() => handleStageDrop(stage.id)}
-                  className="min-h-[520px] rounded-[28px] border border-white/10 bg-[#08111f]/55 p-4"
+                  className="min-h-[460px] rounded-[28px] border border-white/10 bg-[#08111f]/55 p-4"
                 >
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <div>
@@ -250,6 +264,8 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
                         const noteValue = draftNotes[lead.id] ?? lead.notes;
                         const noteChanged = noteValue !== lead.notes;
                         const summary = getLeadSummary(lead);
+                        const isExpanded = Boolean(expandedLeadIds[lead.id]);
+                        const quickSummary = truncateText(summary, 120);
 
                         return (
                           <article
@@ -257,38 +273,72 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
                             draggable
                             onDragStart={() => setDraggingLeadId(lead.id)}
                             onDragEnd={() => setDraggingLeadId(null)}
-                            className="rounded-3xl border border-white/10 bg-white p-4 text-brand-title shadow-[0_18px_42px_rgba(15,23,42,0.16)]"
+                            className="rounded-[26px] border border-white/10 bg-white px-4 py-3.5 text-brand-title shadow-[0_16px_32px_rgba(15,23,42,0.14)] transition-shadow hover:shadow-[0_18px_40px_rgba(15,23,42,0.18)]"
                           >
                             <div className="flex items-start justify-between gap-3">
-                              <div>
-                                <h3 className="text-base font-medium text-brand-title">
+                              <div className="min-w-0">
+                                <h3 className="truncate text-[15px] font-semibold text-brand-title">
                                   {lead.name || lead.email}
                                 </h3>
-                                <p className="mt-1 text-sm text-brand-subtitle">
+                                <p className="mt-1 truncate text-sm text-brand-subtitle">
                                   {lead.company || "No company yet"}
                                 </p>
                               </div>
-                              <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-slate-500">
-                                {lead.latestFormType}
+                              <div className="flex flex-col items-end gap-2">
+                                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                  {lead.latestFormType}
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => toggleLeadExpanded(lead.id)}
+                                  className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500 transition-colors hover:border-slate-300 hover:text-slate-700"
+                                >
+                                  {isExpanded ? (
+                                    <>
+                                      Collapse
+                                      <ChevronUp className="h-3.5 w-3.5" />
+                                    </>
+                                  ) : (
+                                    <>
+                                      Expand
+                                      <ChevronDown className="h-3.5 w-3.5" />
+                                    </>
+                                  )}
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              <span className="truncate rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600">
+                                {lead.email}
                               </span>
-                            </div>
-
-                            <div className="mt-4 space-y-2 text-sm text-brand-subtitle">
-                              <p className="break-all">{lead.email}</p>
-                              {lead.phone && <p>{lead.phone}</p>}
-                              {(lead.role || lead.industry) && (
-                                <p>{[lead.role, lead.industry].filter(Boolean).join(" • ")}</p>
+                              {lead.phone && (
+                                <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600">
+                                  {lead.phone}
+                                </span>
                               )}
-                              {lead.companySize && <p>{lead.companySize}</p>}
                             </div>
 
-                            {summary && (
-                              <p className="mt-4 rounded-2xl bg-slate-50 px-3 py-2 text-sm leading-relaxed text-slate-600">
-                                {summary}
+                            {(lead.role || lead.industry || lead.companySize) && (
+                              <p className="mt-3 text-xs text-slate-500">
+                                {[lead.role, lead.industry, lead.companySize].filter(Boolean).join(" • ")}
                               </p>
                             )}
 
-                            <div className="mt-4 flex flex-wrap gap-2">
+                            <div className="mt-3 flex items-center justify-between gap-3 text-xs text-slate-500">
+                              <p>Updated {formatDate(lead.updatedAt, locale)}</p>
+                              <p>
+                                {lead.submissionCount} form submission{lead.submissionCount === 1 ? "" : "s"}
+                              </p>
+                            </div>
+
+                            {quickSummary && (
+                              <p className="mt-3 rounded-2xl bg-slate-50 px-3 py-2 text-sm leading-relaxed text-slate-600">
+                                {quickSummary}
+                              </p>
+                            )}
+
+                            <div className="mt-3 flex flex-wrap gap-2">
                               {lead.sources.map((source) => (
                                 <span
                                   key={`${lead.id}-${source}`}
@@ -299,55 +349,67 @@ export function LeadKanbanBoard({ locale }: { locale: string }) {
                               ))}
                             </div>
 
-                            <div className="mt-4 grid gap-2 text-xs text-slate-500">
-                              <p>Updated {formatDate(lead.updatedAt, locale)}</p>
-                              <p>{lead.submissionCount} form submission{lead.submissionCount === 1 ? "" : "s"}</p>
-                            </div>
+                            {isExpanded && (
+                              <div className="mt-4 space-y-4 border-t border-slate-200 pt-4">
+                                {summary && (
+                                  <p className="rounded-2xl bg-slate-50 px-3 py-3 text-sm leading-relaxed text-slate-600">
+                                    {summary}
+                                  </p>
+                                )}
 
-                            <div className="mt-4 space-y-2">
-                              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                                Move stage
-                              </label>
-                              <select
-                                value={lead.stage}
-                                onChange={(event) =>
-                                  void saveLead(lead.id, { stage: event.target.value as LeadStage })
-                                }
-                                className="w-full rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-brand-title outline-none transition-colors focus:border-brand-navy/30"
-                              >
-                                {stages.map((entry) => (
-                                  <option key={entry.id} value={entry.id}>
-                                    {entry.label}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
+                                <div className="space-y-2">
+                                  <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                    Stage
+                                  </p>
+                                  <div className="grid grid-cols-2 gap-2">
+                                    {stages.map((entry) => {
+                                      const isActive = lead.stage === entry.id;
+                                      return (
+                                        <button
+                                          key={entry.id}
+                                          type="button"
+                                          disabled={isActive || savingLeadId === lead.id}
+                                          onClick={() => void saveLead(lead.id, { stage: entry.id })}
+                                          className={`rounded-2xl border px-3 py-2 text-sm font-medium transition-colors ${
+                                            isActive
+                                              ? `${stageTheme[entry.id]} cursor-default`
+                                              : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50"
+                                          } disabled:cursor-not-allowed disabled:opacity-70`}
+                                        >
+                                          {entry.label}
+                                        </button>
+                                      );
+                                    })}
+                                  </div>
+                                </div>
 
-                            <div className="mt-4 space-y-2">
-                              <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
-                                Internal notes
-                              </label>
-                              <textarea
-                                value={noteValue}
-                                onChange={(event) =>
-                                  setDraftNotes((current) => ({
-                                    ...current,
-                                    [lead.id]: event.target.value,
-                                  }))
-                                }
-                                rows={3}
-                                placeholder="Add context, next step, or owner notes..."
-                                className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-brand-title outline-none transition-colors placeholder:text-slate-400 focus:border-brand-navy/30 focus:bg-white"
-                              />
-                              <button
-                                type="button"
-                                disabled={!noteChanged || savingLeadId === lead.id}
-                                onClick={() => void saveLead(lead.id, { notes: noteValue })}
-                                className="inline-flex items-center justify-center rounded-2xl bg-brand-navy px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy/92 disabled:cursor-not-allowed disabled:opacity-45"
-                              >
-                                {savingLeadId === lead.id ? "Saving..." : "Save note"}
-                              </button>
-                            </div>
+                                <div className="space-y-2">
+                                  <label className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500">
+                                    Internal notes
+                                  </label>
+                                  <textarea
+                                    value={noteValue}
+                                    onChange={(event) =>
+                                      setDraftNotes((current) => ({
+                                        ...current,
+                                        [lead.id]: event.target.value,
+                                      }))
+                                    }
+                                    rows={3}
+                                    placeholder="Add context, next step, or owner notes..."
+                                    className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-brand-title outline-none transition-colors placeholder:text-slate-400 focus:border-brand-navy/30 focus:bg-white"
+                                  />
+                                  <button
+                                    type="button"
+                                    disabled={!noteChanged || savingLeadId === lead.id}
+                                    onClick={() => void saveLead(lead.id, { notes: noteValue })}
+                                    className="inline-flex items-center justify-center rounded-2xl bg-brand-navy px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-navy/92 disabled:cursor-not-allowed disabled:opacity-45"
+                                  >
+                                    {savingLeadId === lead.id ? "Saving..." : "Save note"}
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </article>
                         );
                       })
