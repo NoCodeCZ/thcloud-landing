@@ -104,7 +104,7 @@ export default async function Home({
                   {t.hero.tagline}
                 </span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-medium leading-[1.1] mb-6 bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
+              <h1 className="text-4xl md:text-6xl font-medium leading-[1.3] pb-1 mb-6 bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
                 {t.hero.headline}
               </h1>
               <p className="text-base md:text-xl text-white/72 leading-relaxed font-[family-name:var(--font-prompt)] max-w-2xl mx-auto mb-10">
