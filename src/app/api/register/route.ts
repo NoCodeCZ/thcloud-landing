@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOrUpdateSubscriber } from "@/lib/listmonk";
 import { fireServerEvent } from "@/lib/fb-capi";
+import { captureLead } from "@/lib/lead-crm";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +21,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    await captureLead({
+      formType: "webinar",
+      source: "webinar",
+      payload: body,
+    });
 
     const listId = parseInt(
       process.env.LISTMONK_WEBINAR_LIST_ID || "2",

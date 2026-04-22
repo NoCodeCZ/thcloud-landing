@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BrandLockup } from "./BrandLockup";
 
 export function TopBar({
   actionLabel,
@@ -14,9 +15,7 @@ export function TopBar({
   return (
     <header className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
       <Link href={brandHref} className="flex items-center gap-2">
-        <span className="font-[family-name:var(--font-bai-jamjuree)] font-bold text-xl text-white">
-          THCloud.AI
-        </span>
+        <BrandLockup textClassName="text-xl" />
       </Link>
       {actionLabel && actionHref && (
         <Button

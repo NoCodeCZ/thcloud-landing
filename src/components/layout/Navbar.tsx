@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import type { Locale } from "@/i18n/config";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { BrandLockup } from "./BrandLockup";
 
 type NavItem = {
   label: string;
@@ -76,9 +77,12 @@ export function Navbar({
           {/* Brand */}
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="font-[family-name:var(--font-bai-jamjuree)] font-bold text-lg md:text-xl text-white hover:opacity-80 transition-opacity"
+            className="hover:opacity-80 transition-opacity"
           >
-            THCloud.AI
+            <BrandLockup
+              textClassName="text-lg md:text-xl"
+              iconClassName="h-7 w-7 md:h-8 md:w-8"
+            />
           </button>
 
           {/* Desktop nav */}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createOrUpdateSubscriber } from "@/lib/listmonk";
 import { fireServerEvent } from "@/lib/fb-capi";
+import { captureLead } from "@/lib/lead-crm";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,6 +33,12 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    await captureLead({
+      formType: "blueprint-lead",
+      source: source || "blueprint",
+      payload: body,
+    });
 
     // Mock mode: if Listmonk is not configured, skip the API call
     if (!process.env.LISTMONK_URL || process.env.LISTMONK_URL === "http://localhost:9000") {

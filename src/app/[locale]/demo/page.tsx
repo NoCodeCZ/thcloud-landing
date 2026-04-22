@@ -4,6 +4,7 @@ import { type Locale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { DemoPageClient } from "@/components/forms/DemoPageClient";
+import { BrandLockup } from "@/components/layout/BrandLockup";
 
 export async function generateMetadata({
   params,
@@ -34,9 +35,7 @@ export default async function DemoPage({
     <main className="min-h-screen bg-brand-dark text-white">
       <header className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto w-full">
         <Link href={`/${locale}`}>
-          <span className="font-[family-name:var(--font-bai-jamjuree)] font-bold text-xl text-white">
-            THCloud.AI
-          </span>
+          <BrandLockup textClassName="text-xl" />
         </Link>
         <LanguageSwitcher locale={locale as Locale} />
       </header>

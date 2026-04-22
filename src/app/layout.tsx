@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Prompt, Bai_Jamjuree } from "next/font/google";
 import { FacebookPixel } from "@/components/tracking/FacebookPixel";
 import "./globals.css";
@@ -19,6 +20,14 @@ const baiJamjuree = Bai_Jamjuree({
   subsets: ["thai", "latin"],
   weight: ["700"],
 });
+
+export const metadata: Metadata = {
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
+};
 
 export default function RootLayout({
   children,

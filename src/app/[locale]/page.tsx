@@ -4,6 +4,7 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { LeadForm } from "@/components/forms/LeadForm";
 import { TrustLogos } from "@/components/sections/TrustLogos";
 import { StickyCTA } from "@/components/sections/StickyCTA";
+import { BrandLockup } from "@/components/layout/BrandLockup";
 import { Navbar } from "@/components/layout/Navbar";
 import Image from "next/image";
 import {
@@ -65,6 +66,22 @@ export default async function Home({
     label: layer.name,
     Icon: layerIcons[index],
   }));
+  const renderSectionCta = () => (
+    <div className="mt-10 flex flex-col gap-4 rounded-2xl border border-white/8 bg-white/[0.03] p-5 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p className="text-sm font-medium text-white">{t.sectionCta.title}</p>
+        <p className="mt-1 text-sm text-white/62 font-[family-name:var(--font-prompt)] leading-relaxed">
+          {t.sectionCta.body}
+        </p>
+      </div>
+      <a
+        href="#lead-form-final"
+        className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-medium text-brand-navy transition-colors hover:bg-white/90"
+      >
+        {t.sectionCta.button}
+      </a>
+    </div>
+  );
 
   return (
     <>
@@ -155,6 +172,7 @@ export default async function Home({
               ))}
             </div>
             <p className="mt-8 text-white/65 italic font-[family-name:var(--font-prompt)] text-center text-base">{t.whoIsFor.closing}</p>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -187,13 +205,8 @@ export default async function Home({
                 {t.coreProblem.result}
               </p>
             </div>
+            {renderSectionCta()}
           </div>
-        </section>
-
-        {/* Mid-page CTA */}
-        <section className="px-6 pb-16 flex flex-col items-center scroll-mt-24" id="lead-form-inline">
-          <LeadForm translations={t.form} locale={locale} variant="inline" />
-          <p className="mt-4 text-sm text-white/55">{t.form.footer}</p>
         </section>
 
         {/* ═══════════════════════════════════════════════════════
@@ -352,6 +365,7 @@ export default async function Home({
                 );
               })}
             </div>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -396,6 +410,7 @@ export default async function Home({
                 </div>
               ))}
             </div>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -435,6 +450,7 @@ export default async function Home({
                 </div>
               ))}
             </div>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -459,6 +475,7 @@ export default async function Home({
                 );
               })}
             </div>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -503,6 +520,7 @@ export default async function Home({
                 </table>
               </div>
             </div>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -526,6 +544,7 @@ export default async function Home({
                 </div>
               ))}
             </div>
+            {renderSectionCta()}
           </div>
         </section>
 
@@ -569,9 +588,12 @@ export default async function Home({
         {/* Footer */}
         <footer className="px-6 py-10 border-t border-white/5">
           <div className="max-w-3xl mx-auto text-center space-y-3">
-            <span className="font-[family-name:var(--font-bai-jamjuree)] font-bold text-sm text-white/45">
-              THCloud.AI
-            </span>
+            <div className="flex justify-center">
+              <BrandLockup
+                textClassName="text-sm text-white/45"
+                iconClassName="h-6 w-6 opacity-70"
+              />
+            </div>
             <p className="text-xs text-white/40 font-[family-name:var(--font-prompt)]">
               {t.footer.tagline}
             </p>
@@ -583,7 +605,7 @@ export default async function Home({
       {/* Sticky mobile CTA */}
       <StickyCTA
         label={t.ctaButton}
-        hiddenWhenVisibleIds={["lead-form-hero", "lead-form-inline", "lead-form-final"]}
+        hiddenWhenVisibleIds={["lead-form-hero", "lead-form-final"]}
       />
     </>
   );
