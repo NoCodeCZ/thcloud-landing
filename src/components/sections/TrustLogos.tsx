@@ -1,47 +1,77 @@
 const logos = [
-  { name: "OpenWebUI", src: "/trust-logos/openwebui.png", hasBg: true },
-  { name: "MindsDB", src: "/trust-logos/mindsdb.png" },
-  { name: "Directus", src: "/trust-logos/directus.png" },
-  { name: "Metabase", src: "/trust-logos/metabase.png", hasBg: true },
-  { name: "LangChain", label: "LangChain" },
-  { name: "ClickHouse", label: "ClickHouse" },
-  { name: "Airbyte", label: "Airbyte" },
-  { name: "Supabase", label: "Supabase" },
+  {
+    name: "OpenWebUI",
+    src: "/trust-logos/openwebui.ico",
+    imageClass: "scale-[0.9]",
+  },
+  {
+    name: "MindsDB",
+    src: "/trust-logos/mindsdb-icon.png",
+    imageClass: "scale-[0.92]",
+  },
+  {
+    name: "Directus",
+    src: "/trust-logos/directus.ico",
+    imageClass: "scale-[0.88]",
+  },
+  {
+    name: "Metabase",
+    src: "/trust-logos/metabase.svg",
+    imageClass: "scale-[0.88]",
+  },
+  { name: "LangChain", src: "/trust-logos/langchain.svg" },
+  { name: "ClickHouse", src: "/trust-logos/clickhouse.ico" },
+  { name: "Airbyte", src: "/trust-logos/airbyte.png" },
+  { name: "Supabase", src: "/trust-logos/supabase.png" },
 ];
 
 export function TrustLogos({ label }: { label?: string }) {
   return (
-    <section className="max-w-3xl mx-auto w-full text-center">
-      <p className="text-xs uppercase tracking-widest text-white/30 mb-6 font-medium">
+    <section className="max-w-6xl mx-auto w-full text-center">
+      <p className="text-xs uppercase tracking-[0.24em] text-white/30 mb-8 font-medium animate-in fade-in slide-in-from-bottom-2 duration-700">
         {label ?? "Powered by"}
       </p>
-      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-4 md:gap-x-10">
-        {logos.map((logo) =>
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-x-4 gap-y-6 md:gap-x-5">
+        {logos.map((logo, index) =>
           logo.src ? (
-            <div key={logo.name} className="flex flex-col items-center gap-1.5">
+            <div
+              key={logo.name}
+              className="group flex flex-col items-center gap-2.5 animate-in fade-in zoom-in-95 slide-in-from-bottom-3 duration-700"
+              style={{
+                animationDelay: `${index * 70}ms`,
+                animationFillMode: "both",
+              }}
+            >
               <div
-                className={`h-10 w-10 md:h-12 md:w-12 rounded-lg flex items-center justify-center overflow-hidden ${
-                  logo.hasBg ? "bg-white/90 p-1.5 md:p-2" : "p-1 md:p-1.5"
-                }`}
+                className="h-16 w-16 md:h-20 md:w-20 rounded-2xl border border-white/10 bg-gradient-to-b from-white/95 to-white/88 p-3 md:p-3.5 shadow-[0_16px_36px_rgba(15,23,42,0.26)] flex items-center justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_22px_42px_rgba(15,23,42,0.34)]"
               >
                 <img
                   src={logo.src}
                   alt={logo.name}
-                  className="max-h-full max-w-full object-contain"
+                  className={`max-h-full max-w-full object-contain ${
+                    "imageClass" in logo ? logo.imageClass ?? "" : ""
+                  } transition-transform duration-300 ease-out group-hover:scale-105`}
                 />
               </div>
-              <span className="text-white/25 text-[9px] md:text-[10px] font-medium">
+              <span className="text-white/32 text-[10px] md:text-xs font-medium transition-colors duration-300 group-hover:text-white/55">
                 {logo.name}
               </span>
             </div>
           ) : (
-            <div key={logo.name} className="flex flex-col items-center gap-1.5">
-              <div className="h-10 w-10 md:h-12 md:w-12 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center">
+            <div
+              key={logo.name}
+              className="group flex flex-col items-center gap-2.5 animate-in fade-in zoom-in-95 slide-in-from-bottom-3 duration-700"
+              style={{
+                animationDelay: `${index * 70}ms`,
+                animationFillMode: "both",
+              }}
+            >
+              <div className="h-16 w-16 md:h-20 md:w-20 rounded-2xl border border-white/10 bg-gradient-to-b from-white/95 to-white/88 shadow-[0_16px_36px_rgba(15,23,42,0.26)] flex items-center justify-center transition-transform duration-300 ease-out group-hover:-translate-y-1 group-hover:shadow-[0_22px_42px_rgba(15,23,42,0.34)]">
                 <span className="text-[9px] md:text-[10px] font-mono font-medium text-white/30">
                   {logo.label!.slice(0, 2).toUpperCase()}
                 </span>
               </div>
-              <span className="text-white/25 text-[9px] md:text-[10px] font-medium">
+              <span className="text-white/32 text-[10px] md:text-xs font-medium transition-colors duration-300 group-hover:text-white/55">
                 {logo.label}
               </span>
             </div>

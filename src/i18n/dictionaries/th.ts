@@ -376,7 +376,7 @@ const th = {
   },
   components: {
     trustLogos: {
-      label: "ขับเคลื่อนโดย",
+      label: "Application Stack ที่เรามั่นใจ",
     },
     webinarForm: {
       nameLabel: "ชื่อ-นามสกุล",

@@ -61,6 +61,10 @@ export default async function Home({
   const { locale } = await params;
   const dict = await getDictionary(locale as Locale);
   const t = dict.home;
+  const heroHighlights = t.whatWeBuild.layers.map((layer, index) => ({
+    label: layer.name,
+    Icon: layerIcons[index],
+  }));
 
   return (
     <>
@@ -75,7 +79,7 @@ export default async function Home({
           <div className="absolute top-[-20%] left-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-indigo-600/8 blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[-10%] right-[-5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-purple-500/5 blur-[100px] pointer-events-none" />
 
-          <div className="relative max-w-6xl mx-auto flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+          <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
             <div className="flex-1 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/15 mb-6">
                 <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
@@ -90,15 +94,36 @@ export default async function Home({
                 {t.hero.subhead}
               </p>
               {/* Hero visual */}
-              <div className="max-w-lg mx-auto lg:mx-0">
-                <Image
-                  src={landingImages.hero}
-                  alt="เปลียนข้อมูลที่กระจัดกระจายให้กลายเป็นระบบธุรกิจ"
-                  width={1200}
-                  height={514}
-                  className="w-full rounded-2xl"
-                  priority
-                />
+              <div className="relative max-w-2xl mx-auto lg:mx-0">
+                <div className="absolute -inset-x-10 -inset-y-8 rounded-[40px] bg-gradient-to-r from-indigo-500/20 via-sky-400/10 to-cyan-400/10 blur-3xl pointer-events-none" />
+                <div className="absolute inset-x-4 inset-y-6 rounded-[34px] bg-gradient-to-br from-white/8 via-indigo-400/8 to-transparent blur-2xl pointer-events-none" />
+
+                <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-2 shadow-[0_28px_90px_rgba(15,23,42,0.65)]">
+                  <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/18 via-white/6 to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 rounded-[30px] ring-1 ring-inset ring-indigo-300/10 pointer-events-none" />
+                  <Image
+                    src={landingImages.hero}
+                    alt="เปลียนข้อมูลที่กระจัดกระจายให้กลายเป็นระบบธุรกิจ"
+                    width={1200}
+                    height={514}
+                    className="w-full rounded-[26px] border border-white/6 object-cover saturate-[1.08] contrast-[1.03]"
+                    priority
+                  />
+                </div>
+
+                <div className="mt-5 hidden md:grid grid-cols-3 gap-3">
+                  {heroHighlights.map(({ label, Icon }) => (
+                    <div
+                      key={label}
+                      className="flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 backdrop-blur-xl shadow-[0_18px_50px_rgba(15,23,42,0.35)]"
+                    >
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-indigo-300" />
+                      <span className="text-center text-[11px] font-medium text-white/70">
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="w-full max-w-sm shrink-0" id="lead-form-hero">
