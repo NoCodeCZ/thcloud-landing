@@ -43,6 +43,15 @@ export async function generateMetadata({
 const problemIcons = [Database, MessageSquare, Brain];
 const layerIcons = [Server, BarChart3, Monitor];
 const diffIcons = [Zap, Globe, Sparkles, Shield];
+const landingImages = {
+  hero: "/landing/hero-banner.jpg",
+  dataFoundation: "/landing/data-foundation.jpg",
+  dataIntelligence: "/landing/data-intelligence.jpg",
+  aiInterface: "/landing/ai-interface.jpg",
+  processImplement: "/landing/process-implement.jpg",
+  results: "/landing/results.jpg",
+  techStack: "/landing/tech-stack.jpg",
+} as const;
 
 export default async function Home({
   params,
@@ -83,7 +92,7 @@ export default async function Home({
               {/* Hero visual */}
               <div className="max-w-lg mx-auto lg:mx-0">
                 <Image
-                  src="/hero-image.png"
+                  src={landingImages.hero}
                   alt="เปลียนข้อมูลที่กระจัดกระจายให้กลายเป็นระบบธุรกิจ"
                   width={1200}
                   height={514}
@@ -204,10 +213,10 @@ export default async function Home({
                       <Image
                         src={
                           i === 0
-                            ? "/data-foundation.png"
+                            ? landingImages.dataFoundation
                             : i === 1
-                            ? "/data-intelligence.png"
-                            : "/ai-interface.png"
+                            ? landingImages.dataIntelligence
+                            : landingImages.aiInterface
                         }
                         alt={layer.name}
                         width={1200}
@@ -332,7 +341,7 @@ export default async function Home({
             {/* Timeline overview visual */}
             <div className="mb-12">
               <Image
-                src="/process-implement.png"
+                src={landingImages.processImplement}
                 alt="แผนการดำเนินงาน — ทีละขั้นตอน"
                 width={1200}
                 height={514}
@@ -376,7 +385,7 @@ export default async function Home({
             {/* Before/After visual */}
             <div className="mb-10">
               <Image
-                src="/results.png"
+                src={landingImages.results}
                 alt="อะไรเปลียน หลังจากนี้ — Before & After"
                 width={1200}
                 height={514}
@@ -439,7 +448,7 @@ export default async function Home({
             {/* Architecture diagram */}
             <div className="mb-10">
               <Image
-                src="/tech-stack.png"
+                src={landingImages.techStack}
                 alt="Tech Stack ที่ขับเคลื่อนระบบ"
                 width={1200}
                 height={675}
