@@ -144,7 +144,7 @@ export default async function Home({
               </div>
             </div>
             <div className="w-full max-w-xl shrink-0 scroll-mt-24" id="lead-form-hero">
-              <LeadForm translations={t.form} locale={locale} collapsible progressive />
+              <LeadForm translations={t.form} locale={locale} collapsible />
             </div>
           </div>
         </section>

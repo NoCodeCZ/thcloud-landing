@@ -35,8 +35,6 @@ const en = {
       requiredHint: "* Required fields",
       firstNameLabel: "First Name *",
       firstNamePlaceholder: "Your first name",
-      lastNameLabel: "Last Name *",
-      lastNamePlaceholder: "Your last name",
       phoneLabel: "Phone Number *",
       phonePlaceholder: "+66 8X XXX XXXX",
       companyLabel: "Company Name *",

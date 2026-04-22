@@ -35,8 +35,6 @@ const th = {
       requiredHint: "* ช่องบังคับ",
       firstNameLabel: "ชื่อ *",
       firstNamePlaceholder: "ชื่อของคุณ",
-      lastNameLabel: "นามสกุล *",
-      lastNamePlaceholder: "นามสกุลของคุณ",
       phoneLabel: "เบอร์โทรศัพท์ *",
       phonePlaceholder: "08X XXX XXXX",
       companyLabel: "ชื่อบริษัท *",

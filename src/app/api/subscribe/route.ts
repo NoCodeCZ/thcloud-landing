@@ -34,6 +34,25 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const requiresBusinessDetails =
+      source === "blueprint-hero-form" ||
+      Boolean(firstName || company || phone || companySize || industry || role);
+
+    if (requiresBusinessDetails) {
+      const hasMissingRequiredDetails =
+        !firstName || !company || !phone || !companySize || !industry || !role;
+
+      if (hasMissingRequiredDetails || !consent) {
+        return NextResponse.json(
+          {
+            error:
+              "First name, company, phone, company size, industry, role, and consent are required",
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     await captureLead({
       formType: "blueprint-lead",
       source: source || "blueprint",

@@ -17,8 +17,6 @@ type LeadFormTranslations = {
   requiredHint: string;
   firstNameLabel: string;
   firstNamePlaceholder: string;
-  lastNameLabel: string;
-  lastNamePlaceholder: string;
   phoneLabel: string;
   phonePlaceholder: string;
   companyLabel: string;
@@ -47,20 +45,17 @@ export function LeadForm({
   locale,
   variant = "default",
   collapsible = false,
-  progressive = false,
 }: {
   translations: LeadFormTranslations;
   locale: string;
   variant?: "default" | "inline" | "dark";
   collapsible?: boolean;
-  progressive?: boolean;
 }) {
   const t = translations;
   const router = useRouter();
   const emailFieldId = useId();
   const errorId = useId();
   const firstNameId = useId();
-  const lastNameId = useId();
   const phoneId = useId();
   const companyId = useId();
   const companySizeId = useId();
@@ -70,12 +65,6 @@ export function LeadForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [expanded, setExpanded] = useState(!collapsible || variant !== "default");
-  const [showOptionalDetails, setShowOptionalDetails] = useState(!progressive);
-  const useProgressive = progressive && variant === "default";
-
-  function stripRequired(label: string) {
-    return label.replace(/\s*\*$/, "");
-  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -85,7 +74,6 @@ export function LeadForm({
     const form = new FormData(e.currentTarget);
     const email = String(form.get("email") ?? "").trim();
     const firstName = String(form.get("firstName") ?? "").trim();
-    const lastName = String(form.get("lastName") ?? "").trim();
     const company = String(form.get("company") ?? "").trim();
     const phone = String(form.get("phone") ?? "").trim();
     const companySize = String(form.get("companySize") ?? "").trim();
@@ -101,11 +89,10 @@ export function LeadForm({
           company: "",
         }
       : {
-          name: [firstName, lastName].filter(Boolean).join(" ").trim(),
+          name: firstName,
           email,
           company,
           firstName,
-          lastName,
           phone,
           companySize,
           industry,
@@ -259,14 +246,6 @@ export function LeadForm({
         </div>
       ) : (
       <div className="space-y-5 p-6 md:p-7">
-        {useProgressive && (
-          <div className="rounded-2xl border border-slate-200 bg-slate-50/80 px-4 py-3">
-            <p className="text-sm leading-relaxed text-slate-600 font-[family-name:var(--font-prompt)]">
-              {t.progressiveHint}
-            </p>
-          </div>
-        )}
-
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label htmlFor={firstNameId} className={labelCls}>
@@ -282,23 +261,7 @@ export function LeadForm({
               className={inputCls}
             />
           </div>
-          {!useProgressive && (
-            <div>
-              <label htmlFor={lastNameId} className={labelCls}>
-                {t.lastNameLabel}
-              </label>
-              <input
-                id={lastNameId}
-                name="lastName"
-                type="text"
-                required
-                autoComplete="family-name"
-                placeholder={t.lastNamePlaceholder}
-                className={inputCls}
-              />
-            </div>
-          )}
-          <div className={useProgressive ? "" : ""}>
+          <div>
             <label htmlFor={companyId} className={labelCls}>
               {t.companyLabel}
             </label>
@@ -312,7 +275,7 @@ export function LeadForm({
               className={inputCls}
             />
           </div>
-          <div className={useProgressive ? "md:col-span-2" : ""}>
+          <div className="md:col-span-2">
             <label htmlFor={emailFieldId} className={labelCls}>
               {t.emailLabel}
             </label>
@@ -329,195 +292,88 @@ export function LeadForm({
               className={inputCls}
             />
           </div>
-
-          {!useProgressive && (
-            <>
-              <div>
-                <label htmlFor={phoneId} className={labelCls}>
-                  {t.phoneLabel}
-                </label>
-                <input
-                  id={phoneId}
-                  name="phone"
-                  type="tel"
-                  required
-                  autoComplete="tel"
-                  inputMode="tel"
-                  placeholder={t.phonePlaceholder}
-                  className={inputCls}
-                />
-              </div>
-              <div className="relative">
-                <label htmlFor={companySizeId} className={labelCls}>
-                  {t.companySizeLabel}
-                </label>
-                <select
-                  id={companySizeId}
-                  name="companySize"
-                  required
-                  defaultValue=""
-                  className={selectCls}
-                >
-                  <option value="" disabled>
-                    {t.companySizePlaceholder}
-                  </option>
-                  {t.companySizes.map((size) => (
-                    <option key={size} value={size}>
-                      {size}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
-              </div>
-              <div className="relative">
-                <label htmlFor={industryId} className={labelCls}>
-                  {t.industryLabel}
-                </label>
-                <select
-                  id={industryId}
-                  name="industry"
-                  required
-                  defaultValue=""
-                  className={selectCls}
-                >
-                  <option value="" disabled>
-                    {t.industryPlaceholder}
-                  </option>
-                  {t.industries.map((industry) => (
-                    <option key={industry} value={industry}>
-                      {industry}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
-              </div>
-              <div className="relative">
-                <label htmlFor={roleId} className={labelCls}>
-                  {t.roleLabel}
-                </label>
-                <select
-                  id={roleId}
-                  name="role"
-                  required
-                  defaultValue=""
-                  className={selectCls}
-                >
-                  <option value="" disabled>
-                    {t.rolePlaceholder}
-                  </option>
-                  {t.roles.map((role) => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </select>
-                <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
-              </div>
-            </>
-          )}
-        </div>
-
-        {useProgressive && (
-          <div className="space-y-4 rounded-[24px] border border-slate-200 bg-white p-4">
-            <button
-              type="button"
-              onClick={() => setShowOptionalDetails((current) => !current)}
-              className="inline-flex items-center gap-2 text-sm font-medium text-brand-navy transition-colors hover:text-brand-navy/80"
-            >
-              <span>{showOptionalDetails ? t.optionalDetailsHideCta : t.optionalDetailsCta}</span>
-              <span className="text-base leading-none">{showOptionalDetails ? "−" : "+"}</span>
-            </button>
-
-            {showOptionalDetails && (
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <label htmlFor={lastNameId} className={labelCls}>
-                    {stripRequired(t.lastNameLabel)}
-                  </label>
-                  <input
-                    id={lastNameId}
-                    name="lastName"
-                    type="text"
-                    autoComplete="family-name"
-                    placeholder={t.lastNamePlaceholder}
-                    className={inputCls}
-                  />
-                </div>
-                <div>
-                  <label htmlFor={phoneId} className={labelCls}>
-                    {stripRequired(t.phoneLabel)}
-                  </label>
-                  <input
-                    id={phoneId}
-                    name="phone"
-                    type="tel"
-                    autoComplete="tel"
-                    inputMode="tel"
-                    placeholder={t.phonePlaceholder}
-                    className={inputCls}
-                  />
-                </div>
-                <div className="relative">
-                  <label htmlFor={companySizeId} className={labelCls}>
-                    {stripRequired(t.companySizeLabel)}
-                  </label>
-                  <select
-                    id={companySizeId}
-                    name="companySize"
-                    defaultValue=""
-                    className={selectCls}
-                  >
-                    <option value="">{t.companySizePlaceholder}</option>
-                    {t.companySizes.map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
-                </div>
-                <div className="relative">
-                  <label htmlFor={industryId} className={labelCls}>
-                    {stripRequired(t.industryLabel)}
-                  </label>
-                  <select
-                    id={industryId}
-                    name="industry"
-                    defaultValue=""
-                    className={selectCls}
-                  >
-                    <option value="">{t.industryPlaceholder}</option>
-                    {t.industries.map((industry) => (
-                      <option key={industry} value={industry}>
-                        {industry}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
-                </div>
-                <div className="relative md:col-span-2">
-                  <label htmlFor={roleId} className={labelCls}>
-                    {stripRequired(t.roleLabel)}
-                  </label>
-                  <select
-                    id={roleId}
-                    name="role"
-                    defaultValue=""
-                    className={selectCls}
-                  >
-                    <option value="">{t.rolePlaceholder}</option>
-                    {t.roles.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
-                  </select>
-                  <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
-                </div>
-              </div>
-            )}
+          <div>
+            <label htmlFor={phoneId} className={labelCls}>
+              {t.phoneLabel}
+            </label>
+            <input
+              id={phoneId}
+              name="phone"
+              type="tel"
+              required
+              autoComplete="tel"
+              inputMode="tel"
+              placeholder={t.phonePlaceholder}
+              className={inputCls}
+            />
           </div>
-        )}
+          <div className="relative">
+            <label htmlFor={companySizeId} className={labelCls}>
+              {t.companySizeLabel}
+            </label>
+            <select
+              id={companySizeId}
+              name="companySize"
+              required
+              defaultValue=""
+              className={selectCls}
+            >
+              <option value="" disabled>
+                {t.companySizePlaceholder}
+              </option>
+              {t.companySizes.map((size) => (
+                <option key={size} value={size}>
+                  {size}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+          </div>
+          <div className="relative">
+            <label htmlFor={industryId} className={labelCls}>
+              {t.industryLabel}
+            </label>
+            <select
+              id={industryId}
+              name="industry"
+              required
+              defaultValue=""
+              className={selectCls}
+            >
+              <option value="" disabled>
+                {t.industryPlaceholder}
+              </option>
+              {t.industries.map((industry) => (
+                <option key={industry} value={industry}>
+                  {industry}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+          </div>
+          <div className="relative">
+            <label htmlFor={roleId} className={labelCls}>
+              {t.roleLabel}
+            </label>
+            <select
+              id={roleId}
+              name="role"
+              required
+              defaultValue=""
+              className={selectCls}
+            >
+              <option value="" disabled>
+                {t.rolePlaceholder}
+              </option>
+              {t.roles.map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+            <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
+          </div>
+        </div>
 
         <div className="rounded-[24px] border border-slate-200 bg-slate-50/75 p-4">
           <label htmlFor={consentId} className="flex items-start gap-3 cursor-pointer">
