@@ -84,7 +84,8 @@ async function main() {
         format: "A4",
         printBackground: true,
         preferCSSPageSize: false,
-        margin: { top: "16mm", bottom: "16mm", left: "12mm", right: "12mm" },
+        scale: 0.92,
+        margin: { top: "10mm", bottom: "10mm", left: "10mm", right: "10mm" },
       });
 
       console.log(`✓ wrote ${outPath}`);
