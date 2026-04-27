@@ -21,7 +21,7 @@ export function TopBar({
         <Button
           asChild
           variant="outline"
-          className="border-white/20 text-white hover:bg-white/10"
+          className="border-white/25 bg-transparent text-white shadow-none hover:bg-white/10 hover:text-white"
         >
           <a href={actionHref}>{actionLabel}</a>
         </Button>
