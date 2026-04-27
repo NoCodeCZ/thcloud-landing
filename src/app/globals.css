@@ -7,17 +7,29 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-ibm-plex-sans-thai);
+  --font-sans: var(--font-anuphan);
+  --font-anuphan: var(--font-anuphan);
   --font-prompt: var(--font-prompt);
   --font-bai: var(--font-bai-jamjuree);
 
-  /* Brand colors */
+  /* Brand colors — sourced from thcloud-website.coolify-app-2.thit.io */
   --color-brand-dark: #0D0D1A;
-  --color-brand-navy: #191845;
+  --color-brand-navy: #0F1635;
+  --color-brand-blue: #3B36CC;
+  --color-brand-blue-hover: #2D29A3;
+  --color-brand-blue-light: #616AF3;
+  --color-brand-tint: #E0E8FF;
+  --color-brand-tint-faint: #EEF3FF;
+  --color-brand-tint-deep: #C6D4FF;
+  --color-brand-panel: #F6F7F8;
+  --color-brand-rose: #EB4569;
   --color-brand-white: #FFFFFF;
   --color-brand-surface: #F9FAFB;
+  --color-brand-ink: #242424;
   --color-brand-title: #121927;
-  --color-brand-subtitle: #6C727F;
+  --color-brand-subtitle: #6A718A;
+  --color-brand-border: #DFE2E8;
+  --color-brand-divider: #E5E7EB;
   --color-brand-alert: #B83129;
 
   /* shadcn mappings */
@@ -60,9 +72,9 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: #0D0D1A;
-  --foreground: #FFFFFF;
+  --radius: 0.75rem;
+  --background: #FFFFFF;
+  --foreground: #242424;
   --card: #FFFFFF;
   --card-foreground: #121927;
   --popover: #FFFFFF;
@@ -100,6 +112,21 @@
 @keyframes pulse-glow {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 0.6; }
+}
+
+/* Infinite marquee for logo strip */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
 }
 
 /* Dot grid pattern */

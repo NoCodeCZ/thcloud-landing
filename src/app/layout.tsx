@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans_Thai, Prompt, Bai_Jamjuree } from "next/font/google";
+import { IBM_Plex_Sans_Thai, Prompt, Bai_Jamjuree, Anuphan } from "next/font/google";
 import { FacebookPixel } from "@/components/tracking/FacebookPixel";
 import "./globals.css";
+
+const anuphan = Anuphan({
+  variable: "--font-anuphan",
+  subsets: ["thai", "latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 const ibmPlexSansThai = IBM_Plex_Sans_Thai({
   variable: "--font-ibm-plex-sans-thai",
@@ -21,13 +27,7 @@ const baiJamjuree = Bai_Jamjuree({
   weight: ["700"],
 });
 
-export const metadata: Metadata = {
-  icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
-  },
-};
+export const metadata: Metadata = {};
 
 export default function RootLayout({
   children,
@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body
-        className={`${ibmPlexSansThai.variable} ${prompt.variable} ${baiJamjuree.variable} antialiased bg-brand-dark text-white`}
+        className={`${anuphan.variable} ${ibmPlexSansThai.variable} ${prompt.variable} ${baiJamjuree.variable} antialiased bg-white text-[#242424]`}
       >
         <FacebookPixel pixelId={process.env.NEXT_PUBLIC_FB_PIXEL_ID || ""} />
         {children}

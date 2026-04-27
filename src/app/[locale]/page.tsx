@@ -6,6 +6,8 @@ import { TrustLogos } from "@/components/sections/TrustLogos";
 import { StickyCTA } from "@/components/sections/StickyCTA";
 import { BrandLockup } from "@/components/layout/BrandLockup";
 import { Navbar } from "@/components/layout/Navbar";
+import { Reveal } from "@/components/effects/Reveal";
+import { ImageScrub } from "@/components/effects/ImageScrub";
 import Image from "next/image";
 import {
   Database,
@@ -66,17 +68,18 @@ export default async function Home({
     label: layer.name,
     Icon: layerIcons[index],
   }));
+
   const renderSectionCta = () => (
-    <div className="mt-10 flex flex-col gap-4 rounded-2xl border border-white/8 bg-white/[0.03] p-5 md:flex-row md:items-center md:justify-between">
+    <div className="mt-12 flex flex-col gap-4 rounded-xl bg-[#EEF3FF] p-6 md:flex-row md:items-center md:justify-between">
       <div>
-        <p className="text-sm font-medium text-white">{t.sectionCta.title}</p>
-        <p className="mt-1 text-sm text-white/62 font-[family-name:var(--font-prompt)] leading-relaxed">
+        <p className="text-sm font-semibold text-[#242424]">{t.sectionCta.title}</p>
+        <p className="mt-1 text-sm text-[#4A4F66] leading-relaxed">
           {t.sectionCta.body}
         </p>
       </div>
       <a
         href="#lead-form-final"
-        className="inline-flex shrink-0 items-center justify-center rounded-2xl bg-white px-5 py-3 text-sm font-medium text-brand-navy transition-colors hover:bg-white/90"
+        className="inline-flex shrink-0 items-center justify-center rounded-xl bg-[#3B36CC] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[#2D29A3] active:scale-[0.98]"
       >
         {t.sectionCta.button}
       </a>
@@ -85,56 +88,52 @@ export default async function Home({
 
   return (
     <>
-      <main className="min-h-screen bg-brand-dark text-white">
+      <main className="min-h-[100dvh] bg-white text-[#242424] font-[family-name:var(--font-anuphan)]">
         <Navbar locale={locale} ctaLabel={t.ctaButton} />
 
         {/* ═══════════════════════════════════════════════════════
-            HERO — Form above the fold
+            HERO — dark navy, matches main site
         ═══════════════════════════════════════════════════════ */}
-        <section className="relative px-6 pt-8 pb-20 md:pt-20 md:pb-28 overflow-hidden">
-          {/* Background effects */}
-          <div className="absolute top-[-20%] left-[-10%] w-[400px] h-[400px] md:w-[600px] md:h-[600px] rounded-full bg-indigo-600/8 blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-[-10%] right-[-5%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] rounded-full bg-purple-500/5 blur-[100px] pointer-events-none" />
+        <section className="relative bg-[#0F1635] text-white overflow-hidden">
+          {/* Subtle radial spotlight (single, restrained) */}
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(97,106,243,0.18),transparent_60%)]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-white/10" />
 
-          <div className="relative max-w-5xl mx-auto flex flex-col gap-10 items-center text-center">
-            <div className="w-full">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/15 mb-6">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                <span className="text-sm font-medium text-indigo-200 tracking-wide">
+          <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-12 px-6 pt-20 pb-28 text-center md:pt-28 md:pb-36">
+            <Reveal stagger className="w-full">
+              <div data-reveal-child className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1">
+                <Sparkles className="h-3.5 w-3.5 text-[#C6D4FF]" />
+                <span className="text-sm font-medium tracking-wide text-[#C6D4FF]">
                   {t.hero.tagline}
                 </span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-medium leading-[1.3] pb-1 mb-6 bg-gradient-to-b from-white via-white to-white/60 bg-clip-text text-transparent">
+              <h1 data-reveal-child className="mx-auto mb-6 max-w-5xl text-[2.6rem] font-medium leading-[1.08] tracking-tight text-white md:text-[4.25rem]">
                 {t.hero.headline}
               </h1>
-              <p className="text-base md:text-xl text-white/72 leading-relaxed font-[family-name:var(--font-prompt)] max-w-2xl mx-auto mb-10">
+              <p data-reveal-child className="mx-auto mb-12 max-w-2xl text-base leading-relaxed text-white/75 md:text-xl">
                 {t.hero.subhead}
               </p>
-              {/* Hero visual */}
-              <div className="relative max-w-3xl mx-auto">
-                <div className="absolute -inset-x-10 -inset-y-8 rounded-[40px] bg-gradient-to-r from-indigo-500/20 via-sky-400/10 to-cyan-400/10 blur-3xl pointer-events-none" />
-                <div className="absolute inset-x-4 inset-y-6 rounded-[34px] bg-gradient-to-br from-white/8 via-indigo-400/8 to-transparent blur-2xl pointer-events-none" />
 
-                <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-2 shadow-[0_28px_90px_rgba(15,23,42,0.65)]">
-                  <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-white/18 via-white/6 to-transparent pointer-events-none" />
-                  <div className="absolute inset-0 rounded-[30px] ring-1 ring-inset ring-indigo-300/10 pointer-events-none" />
+              {/* Hero visual — clean, no gradient halos */}
+              <div data-reveal-child className="relative mx-auto max-w-3xl">
+                <div className="group overflow-hidden rounded-2xl ring-1 ring-white/10 bg-white/5">
                   <Image
                     src={landingImages.hero}
-                    alt="เปลียนข้อมูลที่กระจัดกระจายให้กลายเป็นระบบธุรกิจ"
+                    alt="THCloud.AI — Intelligent automation"
                     width={1200}
                     height={514}
-                    className="w-full rounded-[26px] border border-white/6 object-cover saturate-[1.08] contrast-[1.03]"
+                    className="w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.04]"
                     priority
                   />
                 </div>
 
-                <div className="mt-5 hidden md:grid grid-cols-3 gap-3">
+                <div className="mt-5 hidden grid-cols-3 gap-3 md:grid">
                   {heroHighlights.map(({ label, Icon }) => (
                     <div
                       key={label}
-                      className="flex min-w-0 items-center justify-center gap-2 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 backdrop-blur-xl shadow-[0_18px_50px_rgba(15,23,42,0.35)]"
+                      className="flex min-w-0 items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3 backdrop-blur-sm transition-colors duration-300 hover:bg-white/[0.08]"
                     >
-                      <Icon className="h-3.5 w-3.5 shrink-0 text-indigo-300" />
+                      <Icon className="h-3.5 w-3.5 shrink-0 text-[#C6D4FF]" />
                       <span className="text-center text-xs font-medium text-white/85">
                         {label}
                       </span>
@@ -142,55 +141,64 @@ export default async function Home({
                   ))}
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             <div className="w-full max-w-xl" id="lead-form-hero">
-              <div className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 md:p-7 backdrop-blur-sm">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                  <a
-                    href="#lead-form-final"
-                    className="inline-flex flex-1 items-center justify-center rounded-2xl bg-white px-6 py-4 text-sm font-medium text-brand-navy transition-transform hover:scale-[1.02]"
-                  >
-                    {t.ctaButton}
-                  </a>
-                  <a
-                    href={`/${locale}/demo`}
-                    className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-indigo-100/80 transition-colors hover:text-indigo-100"
-                  >
-                    {t.finalCta.bookCall} &rarr;
-                  </a>
-                </div>
-                <p className="mt-4 text-xs leading-relaxed text-white/55 font-[family-name:var(--font-prompt)]">
-                  {t.form.footer}
-                </p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <a
+                  href="#lead-form-final"
+                  className="inline-flex flex-1 items-center justify-center rounded-xl bg-[#3B36CC] px-6 py-4 text-sm font-medium text-white transition-colors hover:bg-[#2D29A3] active:scale-[0.98]"
+                >
+                  {t.ctaButton}
+                </a>
+                <a
+                  href={`/${locale}/demo`}
+                  className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium text-[#C6D4FF] transition-colors hover:text-white"
+                >
+                  {t.finalCta.bookCall} &rarr;
+                </a>
               </div>
+              <p className="mt-4 text-xs leading-relaxed text-white/55">
+                {t.form.footer}
+              </p>
             </div>
           </div>
         </section>
 
-        {/* Trust Logos */}
-        <section className="px-6 pb-16">
+        {/* Trust Logos — light panel */}
+        <section className="bg-[#F6F7F8] px-6 py-12">
           <TrustLogos label={dict.components.trustLogos.label} />
         </section>
 
         {/* ═══════════════════════════════════════════════════════
             WHO THIS IS FOR
         ═══════════════════════════════════════════════════════ */}
-        <section className="px-6 py-16 md:py-24 border-t border-white/5">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-indigo-200/75 mb-3 font-medium">{t.sectionLabels.targetAudience}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-10">{t.whoIsFor.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="border-t border-[#E5E7EB] bg-white px-6 py-24 md:py-36">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.targetAudience}
+            </p>
+            <h2 className="mb-12 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.whoIsFor.title}
+            </h2>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {t.whoIsFor.items.map((item, i) => (
-                <div key={i} className="flex gap-3 items-start bg-white/[0.02] rounded-xl p-4 border border-white/5 hover:border-white/10 transition-colors">
-                  <div className="w-6 h-6 rounded-lg bg-indigo-500/10 flex items-center justify-center shrink-0 mt-0.5">
-                    <Check className="w-3.5 h-3.5 text-indigo-400" />
+                <div
+                  key={i}
+                  className="flex items-start gap-3 rounded-xl bg-[#F6F7F8] p-5 transition-colors hover:bg-[#EEF3FF]"
+                >
+                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-[#E0E8FF]">
+                    <Check className="h-3.5 w-3.5 text-[#3B36CC]" />
                   </div>
-                  <span className="text-base text-white/80 font-[family-name:var(--font-prompt)] leading-relaxed">{item}</span>
+                  <span className="text-base leading-relaxed text-[#242424]">
+                    {item}
+                  </span>
                 </div>
               ))}
             </div>
-            <p className="mt-8 text-white/65 italic font-[family-name:var(--font-prompt)] text-center text-base">{t.whoIsFor.closing}</p>
+            <p className="mt-10 text-center text-base italic leading-relaxed text-[#6A718A]">
+              {t.whoIsFor.closing}
+            </p>
             {renderSectionCta()}
           </div>
         </section>
@@ -198,29 +206,43 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             CORE PROBLEM
         ═══════════════════════════════════════════════════════ */}
-        <section id="problem" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-red-300/75 mb-3 font-medium">{t.sectionLabels.theChallenge}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-12">{t.coreProblem.title}</h2>
-            <div className="space-y-6">
+        <section
+          id="problem"
+          className="scroll-mt-20 border-t border-[#E5E7EB] bg-[#F6F7F8] px-6 py-24 md:py-36"
+        >
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-[#B83129]">
+              {t.sectionLabels.theChallenge}
+            </p>
+            <h2 className="mb-14 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.coreProblem.title}
+            </h2>
+            <div className="space-y-4">
               {t.coreProblem.problems.map((p, i) => {
                 const Icon = problemIcons[i];
                 return (
-                  <div key={i} className="flex gap-4 items-start bg-white/[0.02] rounded-2xl p-5 md:p-6 border border-white/5 hover:border-white/10 transition-colors">
-                    <div className="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                      <Icon className="w-5 h-5 text-indigo-300/70" />
+                  <div
+                    key={i}
+                    className="flex items-start gap-5 rounded-xl bg-white p-6 md:p-7"
+                  >
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E0E8FF]">
+                      <Icon className="h-5 w-5 text-[#3B36CC]" />
                     </div>
                     <div>
-                      <h3 className="text-base md:text-lg font-medium mb-2">{p.title}</h3>
-                      <p className="text-base text-white/78 font-[family-name:var(--font-prompt)] leading-relaxed">{p.body}</p>
+                      <h3 className="mb-2 text-base font-semibold text-[#242424] md:text-lg">
+                        {p.title}
+                      </h3>
+                      <p className="text-base leading-relaxed text-[#555555]">
+                        {p.body}
+                      </p>
                     </div>
                   </div>
                 );
               })}
             </div>
-            <div className="mt-8 p-5 rounded-2xl bg-red-500/[0.04] border border-red-500/10">
-              <p className="text-white/78 font-[family-name:var(--font-prompt)] flex items-start gap-3 text-base leading-relaxed">
-                <AlertTriangle className="w-5 h-5 text-red-400/60 shrink-0 mt-0.5" />
+            <div className="mt-8 rounded-xl bg-[#FEE7EC] p-5">
+              <p className="flex items-start gap-3 text-base leading-relaxed text-[#242424]">
+                <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[#EB4569]" />
                 {t.coreProblem.result}
               </p>
             </div>
@@ -231,74 +253,96 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             WHAT WE BUILD — 3 LAYERS
         ═══════════════════════════════════════════════════════ */}
-        <section id="solution" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-indigo-500/[0.02] to-transparent pointer-events-none" />
-          <div className="relative max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-indigo-200/75 mb-3 font-medium">{t.sectionLabels.ourSolution}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-3">{t.whatWeBuild.title}</h2>
-            <p className="mb-14 text-lg text-white/72 font-[family-name:var(--font-prompt)] leading-relaxed">{t.whatWeBuild.subtitle}</p>
+        <section
+          id="solution"
+          className="relative scroll-mt-20 border-t border-[#E5E7EB] bg-white px-6 py-24 md:py-36"
+        >
+          <div className="relative mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.ourSolution}
+            </p>
+            <h2 className="mb-4 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.whatWeBuild.title}
+            </h2>
+            <p className="mb-16 text-lg leading-relaxed text-[#6A718A]">
+              {t.whatWeBuild.subtitle}
+            </p>
 
             <div className="space-y-20">
               {t.whatWeBuild.layers.map((layer, i) => {
                 const Icon = layerIcons[i];
                 return (
                   <div key={i} className="relative">
-                    {/* Layer number accent */}
-                    <div className="absolute -left-4 md:-left-12 top-0 text-[80px] font-bold text-white/[0.02] leading-none select-none pointer-events-none">
+                    <div className="pointer-events-none absolute -left-4 top-0 select-none text-[80px] font-bold leading-none text-[#3B36CC]/[0.05] md:-left-12">
                       {layer.number}
                     </div>
 
-                    {/* Layer header */}
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/15 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-indigo-400" />
+                    <div className="mb-5 flex items-center gap-3">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#E0E8FF]">
+                        <Icon className="h-5 w-5 text-[#3B36CC]" />
                       </div>
                       <div>
-                        <p className="text-[11px] uppercase tracking-[0.2em] text-indigo-200/75 font-medium">
+                        <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-[#3B36CC]">
                           Layer {layer.number}
                         </p>
-                        <h3 className="text-xl font-medium">{layer.name}</h3>
+                        <h3 className="text-xl font-semibold text-[#242424]">
+                          {layer.name}
+                        </h3>
                       </div>
                     </div>
-                    <p className="mb-3 pl-14 text-base text-indigo-100/75 italic">{layer.tagline}</p>
-                    <p className="mb-6 text-base text-white/76 font-[family-name:var(--font-prompt)] leading-relaxed">
+                    <p className="mb-3 pl-14 text-base italic text-[#3B36CC]">
+                      {layer.tagline}
+                    </p>
+                    <p className="mb-6 text-base leading-relaxed text-[#555555]">
                       {layer.description}
                     </p>
 
-                    {/* Layer visual */}
-                    <div className="mb-6">
-                      <Image
-                        src={
-                          i === 0
-                            ? landingImages.dataFoundation
-                            : i === 1
-                            ? landingImages.dataIntelligence
-                            : landingImages.aiInterface
-                        }
-                        alt={layer.name}
-                        width={1200}
-                        height={675}
-                        className="w-full rounded-2xl"
-                      />
-                    </div>
+                    <ImageScrub className="mb-6">
+                      <div className="group overflow-hidden rounded-xl">
+                        <Image
+                          src={
+                            i === 0
+                              ? landingImages.dataFoundation
+                              : i === 1
+                              ? landingImages.dataIntelligence
+                              : landingImages.aiInterface
+                          }
+                          alt={layer.name}
+                          width={1200}
+                          height={675}
+                          className="w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                        />
+                      </div>
+                    </ImageScrub>
 
-                    {/* Layer 1: data sources table */}
                     {"sources" in layer && layer.sources && (
-                      <div className="overflow-x-auto mb-6 bg-white/[0.02] rounded-xl border border-white/5 p-4">
+                      <div className="mb-6 overflow-x-auto rounded-xl bg-[#F6F7F8] p-4">
                         <table className="w-full text-sm">
                           <thead>
-                            <tr className="border-b border-white/10">
-                              <th className="text-left py-2 pr-4 text-white/60 font-medium text-[11px] uppercase tracking-wider">Source</th>
-                              <th className="text-left py-2 pr-4 text-white/60 font-medium text-[11px] uppercase tracking-wider">Method</th>
-                              <th className="text-left py-2 text-white/60 font-medium text-[11px] uppercase tracking-wider">Data</th>
+                            <tr className="border-b border-[#DFE2E8]">
+                              <th className="py-2 pr-4 text-left text-[11px] font-medium uppercase tracking-wider text-[#6A718A]">
+                                Source
+                              </th>
+                              <th className="py-2 pr-4 text-left text-[11px] font-medium uppercase tracking-wider text-[#6A718A]">
+                                Method
+                              </th>
+                              <th className="py-2 text-left text-[11px] font-medium uppercase tracking-wider text-[#6A718A]">
+                                Data
+                              </th>
                             </tr>
                           </thead>
                           <tbody>
                             {layer.sources.map((s, j) => (
-                              <tr key={j} className="border-b border-white/[0.03]">
-                                <td className="py-2.5 pr-4 text-white/82 font-[family-name:var(--font-prompt)] text-sm">{s.source}</td>
-                                <td className="py-2.5 pr-4 text-indigo-200/80 font-[family-name:var(--font-prompt)] text-sm">{s.method}</td>
-                                <td className="py-2.5 text-white/72 font-[family-name:var(--font-prompt)] text-sm leading-relaxed">{s.data}</td>
+                              <tr key={j} className="border-b border-[#DFE2E8]/60 last:border-0">
+                                <td className="py-2.5 pr-4 text-sm text-[#242424]">
+                                  {s.source}
+                                </td>
+                                <td className="py-2.5 pr-4 text-sm font-medium text-[#3B36CC]">
+                                  {s.method}
+                                </td>
+                                <td className="py-2.5 text-sm leading-relaxed text-[#555555]">
+                                  {s.data}
+                                </td>
                               </tr>
                             ))}
                           </tbody>
@@ -307,19 +351,28 @@ export default async function Home({
                     )}
 
                     {"output" in layer && layer.output && (
-                      <p className="mb-4 pl-1 text-sm text-white/68 font-[family-name:var(--font-prompt)] leading-relaxed">{layer.output}</p>
+                      <p className="mb-4 pl-1 text-sm leading-relaxed text-[#6A718A]">
+                        {layer.output}
+                      </p>
                     )}
 
-                    {/* Layer 2: dashboards + agent examples */}
                     {"dashboards" in layer && layer.dashboards && (
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                      <div className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-3">
                         {layer.dashboards.map((d, j) => (
-                          <div key={j} className="bg-white/[0.03] rounded-xl p-4 border border-white/5 hover:border-indigo-500/15 transition-colors">
-                            <h4 className="mb-3 text-sm font-medium text-indigo-100 uppercase tracking-wider">{d.name}</h4>
+                          <div
+                            key={j}
+                            className="rounded-xl bg-[#F6F7F8] p-5"
+                          >
+                            <h4 className="mb-3 text-sm font-semibold uppercase tracking-wider text-[#3B36CC]">
+                              {d.name}
+                            </h4>
                             <ul className="space-y-1.5">
                               {d.items.map((item, k) => (
-                                <li key={k} className="flex gap-1.5 items-start text-sm text-white/74 font-[family-name:var(--font-prompt)] leading-relaxed">
-                                  <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-indigo-300/65" />
+                                <li
+                                  key={k}
+                                  className="flex items-start gap-1.5 text-sm leading-relaxed text-[#242424]"
+                                >
+                                  <ChevronRight className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#3B36CC]" />
                                   {item}
                                 </li>
                               ))}
@@ -330,13 +383,16 @@ export default async function Home({
                     )}
 
                     {"agentExamples" in layer && layer.agentExamples && (
-                      <div className="bg-gradient-to-br from-indigo-500/[0.04] to-transparent rounded-xl p-5 border border-indigo-500/10">
-                        <p className="mb-3 text-[11px] uppercase tracking-[0.2em] text-indigo-100/70 font-medium">
+                      <div className="rounded-xl bg-[#EEF3FF] p-5">
+                        <p className="mb-3 text-[11px] font-medium uppercase tracking-[0.2em] text-[#3B36CC]">
                           {t.sectionLabels.aiAgentExamples}
                         </p>
                         <div className="space-y-2.5">
                           {layer.agentExamples.map((ex, j) => (
-                            <p key={j} className="border-l-2 border-indigo-400/25 pl-3 text-base text-white/78 italic font-[family-name:var(--font-prompt)] leading-relaxed">
+                            <p
+                              key={j}
+                              className="border-l-2 border-[#3B36CC] pl-3 text-base italic leading-relaxed text-[#242424]"
+                            >
                               {ex}
                             </p>
                           ))}
@@ -344,26 +400,35 @@ export default async function Home({
                       </div>
                     )}
 
-                    {/* Layer 3: team & admin features */}
                     {"teamFeatures" in layer && layer.teamFeatures && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                        <div className="bg-white/[0.02] rounded-xl p-5 border border-white/5">
-                          <p className="mb-4 text-[11px] uppercase tracking-[0.2em] text-white/60 font-medium">{t.sectionLabels.yourTeamGets}</p>
+                      <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div className="rounded-xl bg-[#F6F7F8] p-5">
+                          <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.2em] text-[#6A718A]">
+                            {t.sectionLabels.yourTeamGets}
+                          </p>
                           <ul className="space-y-2.5">
                             {layer.teamFeatures.map((f, j) => (
-                              <li key={j} className="flex gap-2 items-start text-sm text-white/76 font-[family-name:var(--font-prompt)] leading-relaxed">
-                                <Check className="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-0.5" />
+                              <li
+                                key={j}
+                                className="flex items-start gap-2 text-sm leading-relaxed text-[#242424]"
+                              >
+                                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#3B36CC]" />
                                 {f}
                               </li>
                             ))}
                           </ul>
                         </div>
-                        <div className="bg-white/[0.02] rounded-xl p-5 border border-white/5">
-                          <p className="mb-4 text-[11px] uppercase tracking-[0.2em] text-white/60 font-medium">{t.sectionLabels.youControl}</p>
+                        <div className="rounded-xl bg-[#F6F7F8] p-5">
+                          <p className="mb-4 text-[11px] font-medium uppercase tracking-[0.2em] text-[#6A718A]">
+                            {t.sectionLabels.youControl}
+                          </p>
                           <ul className="space-y-2.5">
                             {("adminFeatures" in layer ? layer.adminFeatures : []).map((f, j) => (
-                              <li key={j} className="flex gap-2 items-start text-sm text-white/76 font-[family-name:var(--font-prompt)] leading-relaxed">
-                                <Check className="w-3.5 h-3.5 text-indigo-400/60 shrink-0 mt-0.5" />
+                              <li
+                                key={j}
+                                className="flex items-start gap-2 text-sm leading-relaxed text-[#242424]"
+                              >
+                                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#3B36CC]" />
                                 {f}
                               </li>
                             ))}
@@ -372,10 +437,12 @@ export default async function Home({
                       </div>
                     )}
 
-                    {/* Tech badges */}
-                    <div className="flex flex-wrap gap-1.5 mt-5">
+                    <div className="mt-5 flex flex-wrap gap-1.5">
                       {layer.tech.map((tech) => (
-                        <span key={tech} className="rounded-md border border-white/10 bg-white/[0.06] px-2.5 py-1 text-[11px] text-white/65 font-mono">
+                        <span
+                          key={tech}
+                          className="rounded-full bg-[#F6F7F8] px-3 py-1 text-[11px] font-medium text-[#555555]"
+                        >
                           {tech}
                         </span>
                       ))}
@@ -391,40 +458,54 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             TIMELINE
         ═══════════════════════════════════════════════════════ */}
-        <section id="timeline" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-indigo-200/75 mb-3 font-medium">{t.sectionLabels.implementation}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-8">{t.timeline.title}</h2>
+        <section
+          id="timeline"
+          className="scroll-mt-20 border-t border-[#E5E7EB] bg-[#F6F7F8] px-6 py-24 md:py-36"
+        >
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.implementation}
+            </p>
+            <h2 className="mb-10 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.timeline.title}
+            </h2>
 
-            {/* Timeline overview visual */}
-            <div className="mb-12">
-              <Image
-                src={landingImages.processImplement}
-                alt="แผนการดำเนินงาน — ทีละขั้นตอน"
-                width={1200}
-                height={514}
-                className="w-full rounded-2xl"
-              />
-            </div>
+            <ImageScrub className="mb-12">
+              <div className="group overflow-hidden rounded-xl bg-white">
+                <Image
+                  src={landingImages.processImplement}
+                  alt={t.timeline.title}
+                  width={1200}
+                  height={514}
+                  className="w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                />
+              </div>
+            </ImageScrub>
 
             <div className="space-y-0">
               {t.timeline.steps.map((step, i) => (
-                <div key={i} className="flex gap-5 relative">
+                <div key={i} className="relative flex gap-5">
                   <div className="flex flex-col items-center">
-                    <div className="w-9 h-9 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xs font-medium text-indigo-300 shrink-0">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#3B36CC] text-xs font-semibold text-white">
                       {i + 1}
                     </div>
                     {i < t.timeline.steps.length - 1 && (
-                      <div className="w-px flex-1 bg-gradient-to-b from-indigo-500/15 to-transparent my-2" />
+                      <div className="my-2 w-px flex-1 bg-[#3B36CC]/20" />
                     )}
                   </div>
                   <div className="pb-10">
-                    <span className="mb-2 inline-block rounded-md bg-indigo-500/10 px-2.5 py-1 text-[11px] text-indigo-100/80 font-medium">
+                    <span className="mb-2 inline-block rounded-full bg-[#E0E8FF] px-3 py-1 text-[11px] font-semibold text-[#3B36CC]">
                       {step.week}
                     </span>
-                    <h3 className="text-base font-medium mb-1.5">{step.title}</h3>
-                    <p className="mb-2 text-base text-white/74 font-[family-name:var(--font-prompt)] leading-relaxed">{step.description}</p>
-                    <p className="text-sm text-white/58 font-[family-name:var(--font-prompt)] leading-relaxed">{step.deliverable}</p>
+                    <h3 className="mb-1.5 text-base font-semibold text-[#242424]">
+                      {step.title}
+                    </h3>
+                    <p className="mb-2 text-base leading-relaxed text-[#555555]">
+                      {step.description}
+                    </p>
+                    <p className="text-sm leading-relaxed text-[#6A718A]">
+                      {step.deliverable}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -436,34 +517,45 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             BEFORE / AFTER
         ═══════════════════════════════════════════════════════ */}
-        <section className="px-6 py-16 md:py-24 border-t border-white/5">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-green-300/75 mb-3 font-medium">{t.sectionLabels.results}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-8">{t.beforeAfter.title}</h2>
+        <section className="border-t border-[#E5E7EB] bg-white px-6 py-24 md:py-36">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.results}
+            </p>
+            <h2 className="mb-10 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.beforeAfter.title}
+            </h2>
 
-            {/* Before/After visual */}
-            <div className="mb-10">
-              <Image
-                src={landingImages.results}
-                alt="อะไรเปลียน หลังจากนี้ — Before & After"
-                width={1200}
-                height={514}
-                className="w-full rounded-2xl"
-              />
-            </div>
+            <ImageScrub className="mb-10">
+              <div className="group overflow-hidden rounded-xl">
+                <Image
+                  src={landingImages.results}
+                  alt={t.beforeAfter.title}
+                  width={1200}
+                  height={514}
+                  className="w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                />
+              </div>
+            </ImageScrub>
 
             <div className="space-y-3">
               {t.beforeAfter.rows.map((row, i) => (
-                <div key={i} className="bg-white/[0.02] rounded-xl p-5 border border-white/5 hover:border-white/10 transition-colors">
-                  <p className="text-sm font-medium text-white/80 mb-3">{row.situation}</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div className="flex gap-2.5 items-start bg-red-500/[0.03] rounded-lg p-3">
-                      <X className="w-4 h-4 text-red-400/40 shrink-0 mt-0.5" />
-                      <p className="text-sm text-white/65 font-[family-name:var(--font-prompt)] leading-relaxed">{row.before}</p>
+                <div key={i} className="rounded-xl bg-[#F6F7F8] p-5">
+                  <p className="mb-3 text-sm font-semibold text-[#242424]">
+                    {row.situation}
+                  </p>
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                    <div className="flex items-start gap-2.5 rounded-lg bg-white p-3">
+                      <X className="mt-0.5 h-4 w-4 shrink-0 text-[#EB4569]" />
+                      <p className="text-sm leading-relaxed text-[#6A718A]">
+                        {row.before}
+                      </p>
                     </div>
-                    <div className="flex gap-2.5 items-start bg-green-500/[0.03] rounded-lg p-3">
-                      <Check className="w-4 h-4 text-green-400/50 shrink-0 mt-0.5" />
-                      <p className="text-sm text-white/82 font-[family-name:var(--font-prompt)] leading-relaxed">{row.after}</p>
+                    <div className="flex items-start gap-2.5 rounded-lg bg-[#EEF3FF] p-3">
+                      <Check className="mt-0.5 h-4 w-4 shrink-0 text-[#3B36CC]" />
+                      <p className="text-sm leading-relaxed text-[#242424]">
+                        {row.after}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -476,20 +568,31 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             DIFFERENTIATORS
         ═══════════════════════════════════════════════════════ */}
-        <section className="px-6 py-16 md:py-24 border-t border-white/5">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-indigo-200/75 mb-3 font-medium">{t.sectionLabels.whyUs}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-10">{t.differentiators.title}</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <section className="border-t border-[#E5E7EB] bg-[#F6F7F8] px-6 py-24 md:py-36">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.whyUs}
+            </p>
+            <h2 className="mb-12 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.differentiators.title}
+            </h2>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {t.differentiators.items.map((item, i) => {
                 const Icon = diffIcons[i];
                 return (
-                  <div key={i} className="bg-white/[0.02] rounded-xl p-5 border border-white/5 hover:border-indigo-500/15 transition-colors group">
-                    <div className="w-9 h-9 rounded-lg bg-indigo-500/[0.07] flex items-center justify-center mb-3 group-hover:bg-indigo-500/10 transition-colors">
-                      <Icon className="w-4 h-4 text-indigo-400/60" />
+                  <div
+                    key={i}
+                    className="group rounded-xl bg-white p-6 transition-colors hover:bg-[#EEF3FF]"
+                  >
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#E0E8FF]">
+                      <Icon className="h-5 w-5 text-[#3B36CC]" />
                     </div>
-                    <h3 className="text-sm font-medium mb-2">{item.title}</h3>
-                    <p className="text-sm text-white/74 font-[family-name:var(--font-prompt)] leading-relaxed">{item.body}</p>
+                    <h3 className="mb-2 text-base font-semibold text-[#242424]">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-[#555555]">
+                      {item.body}
+                    </p>
                   </div>
                 );
               })}
@@ -501,38 +604,61 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             TECH STACK
         ═══════════════════════════════════════════════════════ */}
-        <section id="stack" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-indigo-200/75 mb-3 font-medium">{t.sectionLabels.technology}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-8">{t.stack.title}</h2>
+        <section
+          id="stack"
+          className="scroll-mt-20 border-t border-[#E5E7EB] bg-white px-6 py-24 md:py-36"
+        >
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.technology}
+            </p>
+            <h2 className="mb-10 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.stack.title}
+            </h2>
 
-            {/* Architecture diagram */}
-            <div className="mb-10">
-              <Image
-                src={landingImages.techStack}
-                alt="Tech Stack ที่ขับเคลื่อนระบบ"
-                width={1200}
-                height={675}
-                className="w-full rounded-2xl"
-              />
-            </div>
+            <ImageScrub className="mb-10">
+              <div className="group overflow-hidden rounded-xl">
+                <Image
+                  src={landingImages.techStack}
+                  alt={t.stack.title}
+                  width={1200}
+                  height={675}
+                  className="w-full transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                />
+              </div>
+            </ImageScrub>
 
-            <div className="bg-white/[0.02] rounded-2xl border border-white/5 overflow-hidden">
+            <div className="overflow-hidden rounded-xl bg-[#F6F7F8]">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/10 bg-white/[0.02]">
-                      <th className="text-left py-3 px-5 text-white/60 font-medium text-[11px] uppercase tracking-wider">Layer</th>
-                      <th className="text-left py-3 px-5 text-white/60 font-medium text-[11px] uppercase tracking-wider">Tool</th>
-                      <th className="text-left py-3 px-5 text-white/60 font-medium text-[11px] uppercase tracking-wider">What it does</th>
+                    <tr className="border-b border-[#DFE2E8] bg-[#EEF3FF]">
+                      <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[#3B36CC]">
+                        Layer
+                      </th>
+                      <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[#3B36CC]">
+                        Tool
+                      </th>
+                      <th className="px-5 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-[#3B36CC]">
+                        What it does
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {t.stack.items.map((item, i) => (
-                      <tr key={i} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                        <td className="py-3 px-5 text-white/78 font-[family-name:var(--font-prompt)] text-sm">{item.layer}</td>
-                        <td className="py-3 px-5 text-indigo-100/85 font-medium text-sm">{item.tool}</td>
-                        <td className="py-3 px-5 text-white/70 font-[family-name:var(--font-prompt)] text-sm leading-relaxed">{item.what}</td>
+                      <tr
+                        key={i}
+                        className="border-b border-[#DFE2E8]/60 last:border-0 transition-colors hover:bg-white"
+                      >
+                        <td className="px-5 py-3 text-sm text-[#242424]">
+                          {item.layer}
+                        </td>
+                        <td className="px-5 py-3 text-sm font-semibold text-[#3B36CC]">
+                          {item.tool}
+                        </td>
+                        <td className="px-5 py-3 text-sm leading-relaxed text-[#555555]">
+                          {item.what}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -546,18 +672,29 @@ export default async function Home({
         {/* ═══════════════════════════════════════════════════════
             FAQ
         ═══════════════════════════════════════════════════════ */}
-        <section id="faq" className="px-6 py-16 md:py-24 border-t border-white/5 scroll-mt-20">
-          <div className="max-w-3xl mx-auto">
-            <p className="text-sm uppercase tracking-[0.22em] text-indigo-200/75 mb-3 font-medium">{t.sectionLabels.faq}</p>
-            <h2 className="text-2xl md:text-3xl font-medium mb-10">{t.faq.title}</h2>
+        <section
+          id="faq"
+          className="scroll-mt-20 border-t border-[#E5E7EB] bg-[#F6F7F8] px-6 py-24 md:py-36"
+        >
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-3 text-xs font-medium uppercase tracking-[0.24em] text-[#3B36CC]">
+              {t.sectionLabels.faq}
+            </p>
+            <h2 className="mb-12 text-3xl font-medium tracking-tight text-[#242424] md:text-[2.5rem] md:leading-[1.1]">
+              {t.faq.title}
+            </h2>
             <div className="space-y-3">
               {t.faq.items.map((item, i) => (
-                <div key={i} className="bg-white/[0.02] rounded-xl p-5 border border-white/5 hover:border-white/10 transition-colors">
-                  <div className="flex gap-3 items-start">
-                    <HelpCircle className="w-4 h-4 text-indigo-300/30 shrink-0 mt-0.5" />
+                <div key={i} className="rounded-xl bg-white p-6">
+                  <div className="flex items-start gap-3">
+                    <HelpCircle className="mt-0.5 h-5 w-5 shrink-0 text-[#3B36CC]" />
                     <div>
-                      <h3 className="text-sm font-medium mb-2">{item.q}</h3>
-                      <p className="text-sm text-white/74 font-[family-name:var(--font-prompt)] leading-relaxed">{item.a}</p>
+                      <h3 className="mb-2 text-base font-semibold text-[#242424]">
+                        {item.q}
+                      </h3>
+                      <p className="text-sm leading-relaxed text-[#555555]">
+                        {item.a}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -568,35 +705,38 @@ export default async function Home({
         </section>
 
         {/* ═══════════════════════════════════════════════════════
-            CREDIBILITY + FINAL CTA
+            CREDIBILITY + FINAL CTA — dark, matches main site
         ═══════════════════════════════════════════════════════ */}
-        <section className="px-6 py-20 md:py-28 border-t border-white/5 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-indigo-500/[0.03] to-transparent pointer-events-none" />
-          <div className="relative max-w-3xl mx-auto text-center space-y-8">
-            <p className="max-w-md mx-auto text-sm text-white/58 font-[family-name:var(--font-prompt)] leading-relaxed">
+        <section className="relative overflow-hidden bg-[#0F1635] px-6 py-24 text-white md:py-32">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(97,106,243,0.18),transparent_60%)]" />
+          <div className="relative mx-auto max-w-3xl space-y-8 text-center">
+            <p className="mx-auto max-w-md text-sm leading-relaxed text-white/60">
               {t.credibility.line}
             </p>
 
-            <h2 className="text-3xl md:text-4xl font-medium bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-medium tracking-tight text-white md:text-5xl md:leading-[1.05]">
               {t.finalCta.title}
             </h2>
-            <p className="text-base text-white/76 font-[family-name:var(--font-prompt)] leading-relaxed">
+            <p className="text-base leading-relaxed text-white/75">
               {t.finalCta.body}
             </p>
 
-            <div className="flex justify-center pt-2 scroll-mt-24" id="lead-form-final">
+            <div
+              className="flex scroll-mt-24 justify-center pt-2"
+              id="lead-form-final"
+            >
               <LeadForm translations={t.form} locale={locale} collapsible />
             </div>
 
             <div className="pt-4">
-              <div className="flex items-center gap-3 justify-center mb-4">
-                <div className="flex-1 max-w-[80px] h-px bg-white/10" />
-                <span className="text-sm text-white/35">or</span>
-                <div className="flex-1 max-w-[80px] h-px bg-white/10" />
+              <div className="mb-4 flex items-center justify-center gap-3">
+                <div className="h-px max-w-[80px] flex-1 bg-white/15" />
+                <span className="text-sm text-white/40">or</span>
+                <div className="h-px max-w-[80px] flex-1 bg-white/15" />
               </div>
               <a
                 href={`/${locale}/demo`}
-                className="text-base text-indigo-100/80 hover:text-indigo-100 transition-colors font-medium"
+                className="text-base font-medium text-[#C6D4FF] transition-colors hover:text-white"
               >
                 {t.finalCta.bookCall} &rarr;
               </a>
@@ -604,24 +744,21 @@ export default async function Home({
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="px-6 py-10 border-t border-white/5">
-          <div className="max-w-3xl mx-auto text-center space-y-3">
+        {/* Footer — dark */}
+        <footer className="bg-[#0B1029] px-6 py-12 text-white/60">
+          <div className="mx-auto max-w-3xl space-y-3 text-center">
             <div className="flex justify-center">
               <BrandLockup
-                textClassName="text-sm text-white/45"
-                iconClassName="h-6 w-6 opacity-70"
+                textClassName="text-sm text-white/70"
+                iconClassName="h-6 w-6 opacity-90"
               />
             </div>
-            <p className="text-xs text-white/40 font-[family-name:var(--font-prompt)]">
-              {t.footer.tagline}
-            </p>
-            <p className="text-xs text-white/28">{t.footer.copyright}</p>
+            <p className="text-xs text-white/55">{t.footer.tagline}</p>
+            <p className="text-xs text-white/35">{t.footer.copyright}</p>
           </div>
         </footer>
       </main>
 
-      {/* Sticky mobile CTA */}
       <StickyCTA
         label={t.ctaButton}
         hiddenWhenVisibleIds={["lead-form-hero", "lead-form-final"]}

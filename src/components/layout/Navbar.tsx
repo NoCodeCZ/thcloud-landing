@@ -69,7 +69,7 @@ export function Navbar({
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-brand-dark/90 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10"
+            ? "bg-white/95 backdrop-blur-xl border-b border-[#E5E7EB]"
             : "bg-transparent"
         }`}
       >
@@ -80,7 +80,7 @@ export function Navbar({
             className="hover:opacity-80 transition-opacity"
           >
             <BrandLockup
-              textClassName="text-lg md:text-xl"
+              textClassName={`text-lg md:text-xl transition-colors ${scrolled ? "text-[#242424]" : "text-white"}`}
               iconClassName="h-7 w-7 md:h-8 md:w-8"
             />
           </button>
@@ -91,20 +91,22 @@ export function Navbar({
               <button
                 key={item.href}
                 onClick={() => scrollTo(item.href)}
-                className="px-3 py-1.5 text-sm text-white/72 hover:text-white transition-colors rounded-lg hover:bg-white/5"
+                className={`px-3 py-1.5 text-sm transition-colors rounded-lg ${
+                  scrolled
+                    ? "text-[#555555] hover:text-[#3B36CC] hover:bg-[#EEF3FF]"
+                    : "text-white/80 hover:text-white hover:bg-white/10"
+                }`}
               >
                 {item.label}
               </button>
             ))}
-            <div className="w-px h-5 bg-white/10 mx-2" />
-            <LanguageSwitcher locale={locale as Locale} />
+            <div className={`w-px h-5 mx-2 ${scrolled ? "bg-[#DFE2E8]" : "bg-white/15"}`} />
+            <div className={scrolled ? "text-[#242424]" : "text-white"}>
+              <LanguageSwitcher locale={locale as Locale} />
+            </div>
             <button
               onClick={scrollToForm}
-              className={`ml-3 px-4 py-1.5 text-sm font-medium rounded-lg transition-all duration-300 ${
-                scrolled
-                  ? "bg-white text-brand-navy hover:scale-105"
-                  : "bg-white/10 text-white hover:bg-white/20"
-              }`}
+              className="ml-3 px-4 py-2 text-sm font-medium rounded-xl bg-[#3B36CC] text-white hover:bg-[#2D29A3] transition-colors active:scale-[0.98]"
             >
               {ctaLabel}
             </button>
@@ -112,16 +114,18 @@ export function Navbar({
 
           {/* Mobile: lang + hamburger */}
           <div className="flex md:hidden items-center gap-3">
-            <LanguageSwitcher locale={locale as Locale} />
+            <div className={scrolled ? "text-[#242424]" : "text-white"}>
+              <LanguageSwitcher locale={locale as Locale} />
+            </div>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+              className={`p-1.5 rounded-lg transition-colors ${scrolled ? "hover:bg-[#F6F7F8]" : "hover:bg-white/10"}`}
               aria-label="Toggle menu"
             >
               {mobileOpen ? (
-                <X className="w-5 h-5 text-white" />
+                <X className={`w-5 h-5 ${scrolled ? "text-[#242424]" : "text-white"}`} />
               ) : (
-                <Menu className="w-5 h-5 text-white" />
+                <Menu className={`w-5 h-5 ${scrolled ? "text-[#242424]" : "text-white"}`} />
               )}
             </button>
           </div>
@@ -129,21 +133,21 @@ export function Navbar({
 
         {/* Mobile dropdown */}
         {mobileOpen && (
-          <div className="md:hidden bg-brand-dark/95 backdrop-blur-xl border-b border-white/5">
+          <div className="md:hidden bg-white/98 backdrop-blur-xl border-b border-[#E5E7EB]">
             <nav className="px-6 py-4 space-y-1">
               {navItems.map((item) => (
                 <button
                   key={item.href}
                   onClick={() => scrollTo(item.href)}
-                  className="block w-full text-left px-3 py-2.5 text-sm text-white/80 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  className="block w-full text-left px-3 py-2.5 text-sm text-[#555555] hover:text-[#3B36CC] hover:bg-[#EEF3FF] rounded-lg transition-colors"
                 >
                   {item.label}
                 </button>
               ))}
-              <div className="h-px bg-white/5 my-2" />
+              <div className="h-px bg-[#E5E7EB] my-2" />
               <button
                 onClick={scrollToForm}
-                className="block w-full text-center px-3 py-2.5 text-sm font-medium bg-white text-brand-navy rounded-lg hover:bg-white/90 transition-colors"
+                className="block w-full text-center px-3 py-2.5 text-sm font-medium bg-[#3B36CC] text-white rounded-xl hover:bg-[#2D29A3] transition-colors"
               >
                 {ctaLabel}
               </button>
@@ -151,9 +155,6 @@ export function Navbar({
           </div>
         )}
       </header>
-
-      {/* Spacer for fixed header */}
-      <div className="h-14 md:h-16" />
     </>
   );
 }

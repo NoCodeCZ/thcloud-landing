@@ -18,16 +18,16 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="flex items-center gap-1 text-sm">
+    <div className="flex items-center gap-1 text-sm text-current">
       {locales.map((l, i) => (
         <span key={l} className="flex items-center">
-          {i > 0 && <span className="text-white/30 mx-1">|</span>}
+          {i > 0 && <span className="mx-1 opacity-30">|</span>}
           {l === locale ? (
-            <span className="text-white font-medium">{l.toUpperCase()}</span>
+            <span className="font-semibold">{l.toUpperCase()}</span>
           ) : (
             <Link
               href={getLocalePath(l)}
-              className="text-white/50 hover:text-white transition-colors"
+              className="opacity-50 transition-opacity hover:opacity-100"
             >
               {l.toUpperCase()}
             </Link>
