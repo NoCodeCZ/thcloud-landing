@@ -54,14 +54,19 @@ export function Navbar({
 
   function scrollToForm() {
     setMobileOpen(false);
-    const el = document.getElementById("lead-form-hero");
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
+    const el = document.getElementById("lead-form-final");
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "start" });
+    setTimeout(() => {
+      const expand = el.querySelector<HTMLButtonElement>(
+        'button[type="button"]'
+      );
+      if (expand) expand.click();
       setTimeout(() => {
-        const input = el.querySelector('input[type="email"]') as HTMLInputElement;
-        input?.focus();
-      }, 500);
-    }
+        const input = el.querySelector<HTMLInputElement>('input[type="email"]');
+        input?.focus({ preventScroll: true });
+      }, 250);
+    }, 600);
   }
 
   return (
