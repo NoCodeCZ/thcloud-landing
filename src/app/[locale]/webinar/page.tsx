@@ -104,7 +104,7 @@ export default async function WebinarPage({
                 : "The system I will walk through is not a concept \u2014 I built it and it is running. I will show you exactly what it looks like.",
             footer:
               locale === "th"
-                ? "THCloud.AI คือหน่วยงาน AI Implementation ของ ทงหัว โฮลดิ้ง PCL (SET:TH)"
+                ? "THCloud.AI คือหน่วยงาน AI Implementation ของ ตงฮั้ว โฮลดิ้ง จำกัด (มหาชน)"
                 : "THCloud.AI is the AI implementation arm of Tong Hua Holding PCL (SET:TH)",
           }}
         />

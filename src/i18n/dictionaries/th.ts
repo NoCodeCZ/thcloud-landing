@@ -275,10 +275,13 @@ const th = {
     },
     footer: {
       tagline: "สร้างบนโครงสร้าง Open-source \u00b7 ติดตั้งได้ทุกที่ \u00b7 คุณเป็นเจ้าของระบบ",
-      copyright: "\u00a9 2026 THCloud.AI \u00b7 ทงหัว โฮลดิ้ง PCL (SET:TH)",
+      copyright: "\u00a9 2026 THCloud.AI \u00b7 ตงฮั้ว โฮลดิ้ง จำกัด (มหาชน)",
     },
     credibility: {
-      line: "สร้างโดย ทงหัว โฮลดิ้ง PCL (SET:TH) — 65 ปีในธุรกิจไทย กำลัง Deploy ให้ลูกค้าภาคการผลิตและ SMB",
+      badge: "SET:TH",
+      lead: "สร้างโดย",
+      company: "ตงฮั้ว โฮลดิ้ง จำกัด (มหาชน)",
+      tail: "65 ปีในธุรกิจไทย \u00b7 กำลัง Deploy ให้ลูกค้าภาคการผลิตและ SMB",
     },
     ctaButton: "รับ AI Blueprint ฟรี",
   },

@@ -40,20 +40,30 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const body = (await request.json()) as {
-    username?: string;
-    password?: string;
-  };
+  let body: { username?: string; password?: string };
+  try {
+    body = (await request.json()) as { username?: string; password?: string };
+  } catch {
+    return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
+  }
 
   const username = body.username?.trim() || "";
   const password = body.password?.trim() || "";
 
-  if (!validateAdminCredentials(username, password)) {
-    return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
-  }
+  try {
+    if (!validateAdminCredentials(username, password)) {
+      return NextResponse.json({ error: "Invalid username or password" }, { status: 401 });
+    }
 
-  attempts.delete(ip);
-  const response = NextResponse.json({ success: true });
-  setAdminSessionCookie(response, username);
-  return response;
+    attempts.delete(ip);
+    const response = NextResponse.json({ success: true });
+    setAdminSessionCookie(response, username);
+    return response;
+  } catch (error) {
+    console.error("[admin/login] auth misconfigured:", error);
+    return NextResponse.json(
+      { error: "Admin auth is not configured on this server." },
+      { status: 500 }
+    );
+  }
 }

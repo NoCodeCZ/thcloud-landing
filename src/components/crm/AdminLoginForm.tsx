@@ -23,8 +23,17 @@ export function AdminLoginForm({ locale }: { locale: string }) {
       });
 
       if (!response.ok) {
-        const data = (await response.json()) as { error?: string };
-        throw new Error(data.error || "Login failed");
+        const text = await response.text();
+        let message = `Login failed (${response.status})`;
+        if (text) {
+          try {
+            const data = JSON.parse(text) as { error?: string };
+            if (data.error) message = data.error;
+          } catch {
+            // non-JSON body (HTML error page from proxy/server crash) — keep status-based message
+          }
+        }
+        throw new Error(message);
       }
 
       router.replace(`/${locale}/crm`);

@@ -17,7 +17,8 @@ export function middleware(request: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/blueprint/read") ||
     pathname.startsWith("/blueprint-playbook") ||
-    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff2?|ttf|css|js|map|html)$/)
+    pathname.startsWith("/downloads/") ||
+    pathname.match(/\.(ico|png|jpg|jpeg|svg|gif|webp|woff2?|ttf|css|js|map|html|pdf|txt|xml|json)$/)
   ) {
     return NextResponse.next();
   }
