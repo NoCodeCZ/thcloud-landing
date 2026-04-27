@@ -6,6 +6,7 @@ import {
   CalendarDays,
   CheckCircle2,
   Database,
+  Download,
   FileText,
   Layers3,
   Network,
@@ -36,6 +37,8 @@ const pageCopy = {
       { id: "roadmap", label: "Implementation" },
     ],
     ctaLabel: "Book a Call",
+    pdfLabel: "Download PDF",
+    pdfHref: "/downloads/ai-blueprint-en.pdf",
     finalEyebrow: "Next Step",
     finalTitle: "Book a discovery call when you are ready to scope Phase 1 properly.",
     finalBody:
@@ -59,6 +62,8 @@ const pageCopy = {
       { id: "roadmap", label: "การติดตั้ง" },
     ],
     ctaLabel: "จองคุย",
+    pdfLabel: "ดาวน์โหลด PDF",
+    pdfHref: "/downloads/ai-blueprint-th.pdf",
     finalEyebrow: "ขั้นตอนถัดไป",
     finalTitle: "ถ้าพร้อมจะเริ่ม Phase 1 แบบจริงจัง จอง discovery call ได้เลย",
     finalBody:
@@ -397,7 +402,7 @@ export default async function BlueprintReadPage({
                 {copy.subtitle}
               </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-8 flex flex-wrap items-center gap-3" data-print-hide>
                 {copy.sectionLinks.map((link) => (
                   <Link
                     key={link.id}
@@ -407,6 +412,14 @@ export default async function BlueprintReadPage({
                     {link.label}
                   </Link>
                 ))}
+                <a
+                  href={copy.pdfHref}
+                  download
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-blue"
+                >
+                  <Download className="h-4 w-4" />
+                  {copy.pdfLabel}
+                </a>
               </div>
 
               <div className="mt-8 border-t border-slate-200 pt-8">

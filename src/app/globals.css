@@ -157,3 +157,56 @@
     animation: none;
   }
 }
+
+/* Print mode — used by puppeteer PDF export and browser Print */
+@media print {
+  /* Hide interactive / navigational chrome */
+  [data-print-hide],
+  nav,
+  iframe,
+  .fixed,
+  .sticky {
+    display: none !important;
+  }
+
+  /* Force light backgrounds for readable PDF */
+  html, body, main {
+    background: #ffffff !important;
+    color: #0F1635 !important;
+  }
+
+  /* Avoid awkward page breaks inside cards / sections */
+  section, .rounded-\[36px\], .rounded-\[28px\], .rounded-\[24px\], .rounded-\[22px\] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Tighter spacing for print */
+  section {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Remove heavy shadows that look bad in print */
+  * {
+    box-shadow: none !important;
+  }
+
+  /* Ensure images don't overflow page width */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Disable scroll animations in print */
+  .fade-up-on-scroll {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
