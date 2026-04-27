@@ -402,7 +402,18 @@ export default async function BlueprintReadPage({
                 {copy.subtitle}
               </p>
 
-              <div className="mt-8 flex flex-wrap items-center gap-3" data-print-hide>
+              <div className="mt-8" data-print-hide>
+                <a
+                  href={copy.pdfHref}
+                  download
+                  className="group inline-flex items-center gap-3 rounded-full bg-brand-blue px-7 py-4 text-base font-semibold text-white shadow-[0_12px_36px_rgba(59,54,204,0.35)] ring-1 ring-brand-blue/40 transition-all hover:-translate-y-0.5 hover:bg-brand-blue-hover hover:shadow-[0_18px_48px_rgba(59,54,204,0.45)] md:text-lg"
+                >
+                  <Download className="h-5 w-5 transition-transform group-hover:translate-y-0.5 md:h-6 md:w-6" />
+                  {copy.pdfLabel}
+                </a>
+              </div>
+
+              <div className="mt-6 flex flex-wrap items-center gap-3" data-print-hide>
                 {copy.sectionLinks.map((link) => (
                   <Link
                     key={link.id}
@@ -412,14 +423,6 @@ export default async function BlueprintReadPage({
                     {link.label}
                   </Link>
                 ))}
-                <a
-                  href={copy.pdfHref}
-                  download
-                  className="inline-flex items-center gap-2 rounded-full bg-brand-navy px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-brand-blue"
-                >
-                  <Download className="h-4 w-4" />
-                  {copy.pdfLabel}
-                </a>
               </div>
 
               <div className="mt-8 border-t border-slate-200 pt-8">
