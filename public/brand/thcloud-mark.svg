@@ -12,13 +12,15 @@
 
   <rect width="320" height="320" rx="48" fill="url(#thcloud-bg)"/>
 
-  <g mask="url(#thcloud-mask)" fill="white">
-    <circle cx="182" cy="108" r="63"/>
-    <circle cx="104" cy="160" r="43"/>
-    <circle cx="74" cy="228" r="52"/>
-    <circle cx="138" cy="230" r="78"/>
-    <rect x="74" y="228" width="108" height="44"/>
-  </g>
+  <g transform="translate(160 160) scale(0.82) translate(-147.5 -176.5)">
+    <g mask="url(#thcloud-mask)" fill="white">
+      <circle cx="182" cy="108" r="63"/>
+      <circle cx="104" cy="160" r="43"/>
+      <circle cx="74" cy="228" r="52"/>
+      <circle cx="138" cy="230" r="78"/>
+      <rect x="74" y="228" width="108" height="44"/>
+    </g>
 
-  <circle cx="240" cy="230" r="24" fill="white"/>
+    <circle cx="240" cy="230" r="24" fill="white"/>
+  </g>
 </svg>
