@@ -278,7 +278,10 @@ const en = {
       copyright: "\u00a9 2026 THCloud.AI \u00b7 Tong Hua Holding PCL (SET:TH)",
     },
     credibility: {
-      line: "Built by Tong Hua Holding PCL (SET:TH) — 65 years in Thai business. Deploying now for manufacturing and SMB clients.",
+      badge: "SET:TH",
+      lead: "Built by",
+      company: "Tong Hua Holding PCL (Public)",
+      tail: "65 years in Thai business · Deploying now for manufacturing and SMB clients",
     },
     ctaButton: "Get the Free AI Blueprint",
   },

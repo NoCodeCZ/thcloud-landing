@@ -710,9 +710,21 @@ export default async function Home({
         <section className="relative overflow-hidden bg-[#0F1635] px-6 py-24 text-white md:py-32">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(97,106,243,0.18),transparent_60%)]" />
           <div className="relative mx-auto max-w-3xl space-y-8 text-center">
-            <p className="mx-auto max-w-md text-sm leading-relaxed text-white/60">
-              {t.credibility.line}
-            </p>
+            <div className="mx-auto flex max-w-xl flex-col items-center gap-3">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80 shadow-[0_0_24px_rgba(97,106,243,0.25)] backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                {t.credibility.badge}
+              </span>
+              <p className="text-base leading-relaxed text-white/85 md:text-lg">
+                <span className="text-white/60">{t.credibility.lead} </span>
+                <span className="font-semibold text-white">
+                  {t.credibility.company}
+                </span>
+              </p>
+              <p className="text-sm leading-relaxed text-white/60">
+                {t.credibility.tail}
+              </p>
+            </div>
 
             <h2 className="text-3xl font-medium tracking-tight text-white md:text-5xl md:leading-[1.05]">
               {t.finalCta.title}
