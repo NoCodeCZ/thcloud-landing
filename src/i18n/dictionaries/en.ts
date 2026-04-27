@@ -438,7 +438,7 @@ const en = {
   },
   components: {
     trustLogos: {
-      label: "Powered by",
+      label: "Built with the tools we trust",
     },
     webinarForm: {
       nameLabel: "Full Name",
