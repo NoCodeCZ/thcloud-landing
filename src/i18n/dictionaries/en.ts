@@ -23,7 +23,7 @@ const en = {
         "Your data already exists across multiple channels — it's just not unified in a usable format. We help you build the data infrastructure, dashboards, and AI interface that let your team ask, answer, and decide faster.",
     },
     form: {
-      emailLabel: "Contact Email",
+      emailLabel: "Contact Email *",
       emailPlaceholder: "name@company.com",
       submit: "Read the Playbook",
       submitting: "Opening...",
