@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { LoaderCircle, ShieldCheck, Sparkles } from "lucide-react";
 import { useId, useState } from "react";
 import { fbqTrack } from "@/components/tracking/FacebookCAPI";
+import { validateLeadPayload } from "@/lib/lead-validation";
 
 type LeadFormTranslations = {
   emailLabel: string;
@@ -34,6 +35,7 @@ type LeadFormTranslations = {
   consentHint: string;
   privacyText: string;
   reassurance: string;
+  guardrailHint: string;
   expandCta: string;
   progressiveHint: string;
   optionalDetailsCta: string;
@@ -100,6 +102,13 @@ export function LeadForm({
           consent,
           source: "blueprint-hero-form",
         };
+
+    const validationError = validateLeadPayload(payload);
+    if (validationError) {
+      setError(validationError);
+      setLoading(false);
+      return;
+    }
 
     try {
       const eventId =
@@ -378,6 +387,10 @@ export function LeadForm({
             </select>
             <div className="pointer-events-none absolute right-4 top-[2.75rem] text-slate-400">⌄</div>
           </div>
+        </div>
+
+        <div className="rounded-[24px] border border-emerald-100 bg-emerald-50/70 p-4 text-xs leading-relaxed text-emerald-900 font-[family-name:var(--font-prompt)]">
+          {t.guardrailHint}
         </div>
 
         <div className="rounded-[24px] border border-slate-200 bg-slate-50/75 p-4">

@@ -81,6 +81,7 @@ const en = {
         "By submitting this form, you allow THCloud.AI to send the requested blueprint and follow up about relevant solutions.",
       privacyText: "Contact details are used only for this conversation.",
       reassurance: "Use your business email so our team can tailor the follow-up to your business context.",
+      guardrailHint: "Please use real company details. We verify entries and may reject fake, temporary, or personal contact information.",
       expandCta: "Unlock the playbook",
       progressiveHint: "Start with the basics. Add more business details only if you want a more tailored follow-up.",
       optionalDetailsCta: "Add more details",

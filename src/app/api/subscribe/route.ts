@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fireServerEvent, extractFbContext } from "@/lib/fb-capi";
 import { captureLead } from "@/lib/lead-crm";
+import { validateLeadPayload } from "@/lib/lead-validation";
 
 export const runtime = "nodejs";
 
@@ -19,37 +20,20 @@ export async function POST(request: NextRequest) {
       source,
     } = body;
 
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email is required" },
-        { status: 400 }
-      );
-    }
+    const validationError = validateLeadPayload({
+      email,
+      firstName,
+      company,
+      phone,
+      companySize,
+      industry,
+      role,
+      consent,
+      source,
+    });
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      return NextResponse.json(
-        { error: "Invalid email address" },
-        { status: 400 }
-      );
-    }
-
-    const requiresBusinessDetails =
-      source === "blueprint-hero-form" ||
-      Boolean(firstName || company || phone || companySize || industry || role);
-
-    if (requiresBusinessDetails) {
-      const hasMissingRequiredDetails =
-        !firstName || !company || !phone || !companySize || !industry || !role;
-
-      if (hasMissingRequiredDetails || !consent) {
-        return NextResponse.json(
-          {
-            error:
-              "First name, company, phone, company size, industry, role, and consent are required",
-          },
-          { status: 400 }
-        );
-      }
+    if (validationError) {
+      return NextResponse.json({ error: validationError }, { status: 400 });
     }
 
     await captureLead({
