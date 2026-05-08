@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans_Thai, Prompt, Bai_Jamjuree, Anuphan } from "next/font/google";
 import { FacebookPixel } from "@/components/tracking/FacebookPixel";
+import { LinkedInInsightTag } from "@/components/tracking/LinkedInInsightTag";
 import "./globals.css";
 
 const anuphan = Anuphan({
@@ -40,6 +41,7 @@ export default function RootLayout({
         className={`${anuphan.variable} ${ibmPlexSansThai.variable} ${prompt.variable} ${baiJamjuree.variable} antialiased bg-white text-[#242424]`}
       >
         <FacebookPixel pixelId={process.env.NEXT_PUBLIC_FB_PIXEL_ID || ""} />
+        <LinkedInInsightTag partnerId={process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID || ""} />
         {children}
       </body>
     </html>
